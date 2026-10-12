@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WindowsIntegrityGuard.UI.Communication;
 using WindowsIntegrityGuard.UI.ViewModels;
 
 namespace WindowsIntegrityGuard.UI
@@ -17,12 +18,21 @@ namespace WindowsIntegrityGuard.UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MainViewModel _viewModel;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            DataContext = new MainViewModel();
+            _viewModel = new MainViewModel(new NamedPipeClient());
+            DataContext = _viewModel;
+
+            Loaded += MainWindow_Loaded;
+        }
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            await _viewModel.InitializeAsync();
         }
     }
-}
 }
