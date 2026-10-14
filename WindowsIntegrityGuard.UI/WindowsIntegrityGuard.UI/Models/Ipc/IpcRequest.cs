@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace WindowsIntegrityGuard.UI.Models.Ipc
 {
-    internal class IpcRequest
+    public sealed class IpcRequest
     {
+        public string Command { get; init; } = string.Empty;
     }
 }
