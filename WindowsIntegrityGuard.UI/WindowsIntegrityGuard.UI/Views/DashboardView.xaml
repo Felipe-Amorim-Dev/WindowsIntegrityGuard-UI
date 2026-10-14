@@ -1,0 +1,168 @@
+﻿<UserControl x:Class="WindowsIntegrityGuard.UI.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- CARD PRINCIPAL -->
+        <Border Grid.Row="0"
+                Style="{StaticResource DashboardCardStyle}"
+                Padding="24"
+                MinHeight="155">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="230"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        Width="70"
+                        Height="70"
+                        CornerRadius="35"
+                        Background="#123E31"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+
+                    <TextBlock Text="✓"
+                               FontSize="38"
+                               FontWeight="Bold"
+                               Foreground="#45E481"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Margin="12,0,20,0">
+
+                    <TextBlock Text="{Binding IntegrityStatus}"
+                               Foreground="White"
+                               FontSize="24"
+                               FontWeight="SemiBold"/>
+
+                    <TextBlock Text="{Binding IntegrityMessage}"
+                               Foreground="#C3D1DD"
+                               FontSize="15"
+                               Margin="0,9,0,0"/>
+
+                    <TextBlock Text="Última verificação: --"
+                               Foreground="#8299AD"
+                               FontSize="12"
+                               Margin="0,18,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right">
+
+                    <Button Content="▶  Verificar agora"
+                            Width="190"
+                            Height="48"
+                            Background="#52C5F4"
+                            Foreground="#07131D"
+                            BorderThickness="0"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"/>
+
+                    <TextBlock Text="A verificação será executada pelo Service."
+                               Foreground="#8196A9"
+                               FontSize="10"
+                               Margin="0,10,0,0"
+                               HorizontalAlignment="Right"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- CARDS DE STATUS -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- SERVICE -->
+            <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}" MinHeight="135">
+                <StackPanel>
+                    <TextBlock Text="⚙  Serviço" Style="{StaticResource DashboardTitleStyle}"/>
+
+                    <TextBlock Text="{Binding ServiceStatus}"
+                               Foreground="#44E486"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Margin="0,20,0,0"/>
+
+                    <TextBlock Text="Windows Integrity Guard Service"
+                               Style="{StaticResource DashboardDescriptionStyle}"
+                               Margin="0,7,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- INTEGRIDADE -->
+            <Border Grid.Column="2" Style="{StaticResource DashboardCardStyle}" MinHeight="135">
+                <StackPanel>
+                    <TextBlock Text="♢  Integridade" Style="{StaticResource DashboardTitleStyle}"/>
+
+                    <TextBlock Text="{Binding IntegrityStatus}"
+                               Foreground="#44E486"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Margin="0,20,0,0"/>
+
+                    <TextBlock Text="{Binding IntegrityMessage}"
+                               Style="{StaticResource DashboardDescriptionStyle}"
+                               Margin="0,7,0,0"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ÚLTIMA VERIFICAÇÃO -->
+            <Border Grid.Column="4" Style="{StaticResource DashboardCardStyle}" MinHeight="135">
+                <StackPanel>
+                    <TextBlock Text="▣  Última verificação" Style="{StaticResource DashboardTitleStyle}"/>
+
+                    <TextBlock Text="{Binding LastScan}"
+                               Foreground="#E7EEF4"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Margin="0,20,0,0"/>
+
+                    <TextBlock Text="Nenhuma verificação registrada"
+                               Style="{StaticResource DashboardDescriptionStyle}"
+                               Margin="0,7,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- STATUS -->
+            <Border Grid.Column="6" Style="{StaticResource DashboardCardStyle}" MinHeight="135">
+                <StackPanel>
+                    <TextBlock Text="◯  Status atual" Style="{StaticResource DashboardTitleStyle}"/>
+
+                    <TextBlock Text="{Binding CurrentOperation}"
+                               Foreground="#E7EEF4"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Margin="0,20,0,0"
+                               TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Estado atual da operação"
+                               Style="{StaticResource DashboardDescriptionStyle}"
+                               Margin="0,7,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

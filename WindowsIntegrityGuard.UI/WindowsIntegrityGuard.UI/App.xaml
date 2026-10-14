@@ -35,6 +35,25 @@
             </Style.Triggers>
         </Style>
 
+        <Style x:Key="DashboardCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#132232"/>
+            <Setter Property="BorderBrush" Value="#293C50"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+
+        <Style x:Key="DashboardTitleStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#F3F7FA"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style x:Key="DashboardDescriptionStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#9EB2C7"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
     </Application.Resources>
 
 </Application>

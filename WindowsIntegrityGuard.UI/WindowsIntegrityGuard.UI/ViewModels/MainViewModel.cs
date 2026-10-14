@@ -12,13 +12,10 @@ namespace WindowsIntegrityGuard.UI.ViewModels
     public sealed class MainViewModel : BaseViewModel
     {
         private readonly IIpcClient _ipcClient;
-        private string _serviceStatus = "Verificando serviço...";
 
-        public string ServiceStatus
-        {
-            get => _serviceStatus;
-            set => SetProperty(ref _serviceStatus, value);
-        }
+        public DashboardViewModel Dashboard { get; } = new();
+
+        public string ServiceStatus => Dashboard.ServiceStatus;
 
         public MainViewModel(IIpcClient ipcClient)
         {
@@ -31,7 +28,9 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
             if (!pingResponse.Success)
             {
-                ServiceStatus = "Service indisponível";
+                Dashboard.ServiceStatus = "Service indisponível";
+                Dashboard.CurrentOperation = "Indisponível";
+                OnPropertyChanged(nameof(ServiceStatus));
                 return;
             }
 
@@ -39,7 +38,8 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
             if (!statusResponse.Success || statusResponse.Data is null)
             {
-                ServiceStatus = "Não foi possível obter o status";
+                Dashboard.ServiceStatus = "Status indisponível";
+                OnPropertyChanged(nameof(ServiceStatus));
                 return;
             }
 
@@ -47,23 +47,40 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
             if (snapshot is null)
             {
-                ServiceStatus = "Status inválido";
+                Dashboard.ServiceStatus = "Status inválido";
+                OnPropertyChanged(nameof(ServiceStatus));
                 return;
             }
 
-            ServiceStatus = GetStatusName(snapshot.Status);
+            Dashboard.ServiceStatus = GetStatusName(snapshot.Status);
+            Dashboard.CurrentOperation = GetOperationName(snapshot.Status);
+
+            OnPropertyChanged(nameof(ServiceStatus));
         }
 
         private static string GetStatusName(int status)
         {
             return status switch
             {
-                0 => "Idle",
-                1 => "Scanning",
-                2 => "Repairing",
-                3 => "Completed",
-                4 => "Failed",
-                _ => "Unknown"
+                0 => "Em execução",
+                1 => "Verificando",
+                2 => "Reparando",
+                3 => "Em execução",
+                4 => "Falha",
+                _ => "Desconhecido"
+            };
+        }
+
+        private static string GetOperationName(int status)
+        {
+            return status switch
+            {
+                0 => "Em espera",
+                1 => "Verificação em andamento",
+                2 => "Reparação em andamento",
+                3 => "Operação concluída",
+                4 => "Falha na operação",
+                _ => "Estado desconhecido"
             };
         }
     }
