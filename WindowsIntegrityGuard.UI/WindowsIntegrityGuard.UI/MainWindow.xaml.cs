@@ -29,12 +29,20 @@ namespace WindowsIntegrityGuard.UI
             InitializeComponent();
 
             _viewModel = new MainViewModel(new NamedPipeClient());
-            _trayIconService = new TrayIconService(this);
+            _trayIconService = new TrayIconService(this, ShutdownApplication);
 
             DataContext = _viewModel;
 
             Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
+        }
+
+        public void ShutdownApplication()
+        {
+            _viewModel.Dispose();
+            _trayIconService.Dispose();
+
+            System.Windows.Application.Current.Shutdown();
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)

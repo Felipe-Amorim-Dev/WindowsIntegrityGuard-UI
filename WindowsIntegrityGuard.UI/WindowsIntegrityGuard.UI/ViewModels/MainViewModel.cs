@@ -9,9 +9,11 @@ using WindowsIntegrityGuard.UI.Services;
 
 namespace WindowsIntegrityGuard.UI.ViewModels
 {
-    public sealed class MainViewModel : BaseViewModel
+    public sealed class MainViewModel : BaseViewModel, IDisposable
     {
         private readonly IIpcClient _ipcClient;
+        private readonly CancellationTokenSource _monitoringCancellationTokenSource = new();
+        private bool _monitoringStarted;
 
         public DashboardViewModel Dashboard { get; } = new();
 
@@ -24,38 +26,77 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         public async Task InitializeAsync()
         {
-            IpcResponse pingResponse = await _ipcClient.SendAsync("ping");
+            await RefreshDashboardAsync();
 
-            if (!pingResponse.Success)
+            if (!_monitoringStarted)
+            {
+                _monitoringStarted = true;
+                _ = MonitorDashboardAsync(_monitoringCancellationTokenSource.Token);
+            }
+        }
+
+        #region Metodos Privados
+        private async Task MonitorDashboardAsync(CancellationToken cancellationToken)
+        {
+            using var timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
+
+            try
+            {
+                while (await timer.WaitForNextTickAsync(cancellationToken))
+                {
+                    await RefreshDashboardAsync(cancellationToken);
+                }
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+            }
+        }
+
+        private async Task RefreshDashboardAsync(CancellationToken cancellationToken = default)
+        {
+            IpcResponse response;
+
+            try
+            {
+                response = await _ipcClient.SendAsync("dashboard", cancellationToken);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch
             {
                 SetServiceUnavailable();
                 return;
             }
 
-            IpcResponse dashboardResponse = await _ipcClient.SendAsync("dashboard");
-
-            if (!dashboardResponse.Success || dashboardResponse.Data is null)
+            if (!response.Success || response.Data is null)
             {
-                Dashboard.ServiceStatus = "Status indisponível";
-                Dashboard.CurrentOperation = "Não foi possível obter os dados";
-                OnPropertyChanged(nameof(ServiceStatus));
+                SetServiceUnavailable();
                 return;
             }
 
-            DashboardSnapshot? snapshot = dashboardResponse.Data.Value.Deserialize<DashboardSnapshot>();
+            DashboardSnapshot? snapshot;
+
+            try
+            {
+                snapshot = response.Data.Value.Deserialize<DashboardSnapshot>();
+            }
+            catch (JsonException)
+            {
+                SetInvalidData();
+                return;
+            }
 
             if (snapshot is null)
             {
-                Dashboard.ServiceStatus = "Dados inválidos";
-                Dashboard.CurrentOperation = "Resposta inválida do Service";
-                OnPropertyChanged(nameof(ServiceStatus));
+                SetInvalidData();
                 return;
             }
 
             ApplyDashboardSnapshot(snapshot);
         }
 
-        #region Metodos Privados
         private void ApplyDashboardSnapshot(DashboardSnapshot snapshot)
         {
             Dashboard.ServiceStatus = GetServiceStatusName(snapshot.ServiceStatus);
@@ -78,12 +119,15 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             Dashboard.IntegrityStatus = "Indisponível";
             Dashboard.IntegrityMessage = "Não foi possível conectar ao Windows Integrity Guard Service.";
             Dashboard.CurrentOperation = "Service indisponível";
-            Dashboard.LastScan = "--";
             Dashboard.ScanProgress = null;
-            Dashboard.FilesVerified = null;
-            Dashboard.ProblemsFound = null;
-            Dashboard.ProblemsRepaired = null;
-            Dashboard.LastScanDuration = "--";
+
+            OnPropertyChanged(nameof(ServiceStatus));
+        }
+
+        private void SetInvalidData()
+        {
+            Dashboard.ServiceStatus = "Resposta inválida";
+            Dashboard.CurrentOperation = "Não foi possível interpretar os dados do Service.";
 
             OnPropertyChanged(nameof(ServiceStatus));
         }
@@ -129,5 +173,11 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             };
         }
         #endregion
+
+        public void Dispose()
+        {
+            _monitoringCancellationTokenSource.Cancel();
+            _monitoringCancellationTokenSource.Dispose();
+        }
     }
 }

@@ -13,10 +13,12 @@ namespace WindowsIntegrityGuard.UI.Services
     {
         private readonly NotifyIcon _notifyIcon;
         private readonly Window _mainWindow;
+        private readonly Action _exitAction;
 
-        public TrayIconService(Window mainWindow)
+        public TrayIconService(Window mainWindow, Action exitAction)
         {
             _mainWindow = mainWindow;
+            _exitAction = exitAction;
 
             var contextMenu = new ContextMenuStrip();
 
@@ -63,18 +65,14 @@ namespace WindowsIntegrityGuard.UI.Services
 
         private void ExitApplication()
         {
-            _notifyIcon.Visible = false;
-            _notifyIcon.Dispose();
-
-            System.Windows.Application.Current.Shutdown();
+            _exitAction();
         }
+        #endregion
 
         public void Dispose()
         {
             _notifyIcon.Visible = false;
             _notifyIcon.Dispose();
-        }
-
-        #endregion
+        }        
     }
 }
