@@ -42,6 +42,19 @@ dotnet build WindowsIntegrityGuard.UI/WindowsIntegrityGuard.UI.sln
 - [WindowsIntegrityGuard](https://github.com/Felipe-Amorim-Dev/WindowsIntegrityGuard) — Repositório agregador
 - [WindowsIntegrityGuard-Service](https://github.com/Felipe-Amorim-Dev/WindowsIntegrityGuard-Service) — Serviço de integridade
 
+## 🏗️ Arquitetura e componentes
+
+- Aplicação desktop .NET 9 com WPF e padrão ViewModel.
+- DashboardViewModel expõe ServiceStatus, IntegrityStatus, IntegrityMessage, LastScan e CurrentOperation.
+- NamedPipeClient implementa IIpcClient e envia requisições JSON ao serviço.
+- TrayIconService concentra os recursos de ícone na bandeja.
+
+### Fluxo técnico
+
+1. UI → IIpcClient → NamedPipeClient → pipe WindowsIntegrityGuard → serviço.
+2. O cliente utiliza timeout de três segundos e interpreta mensagens de resposta JSON.
+3. O Dashboard apresenta o estado recebido por meio de propriedades vinculadas à interface.
+
 <a id="licenca"></a>
 ## 📄 Licença
 
