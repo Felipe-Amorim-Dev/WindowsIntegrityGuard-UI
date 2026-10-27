@@ -28,9 +28,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
             if (!pingResponse.Success)
             {
-                Dashboard.ServiceStatus = "Service indisponível";
-                Dashboard.CurrentOperation = "Indisponível";
-                OnPropertyChanged(nameof(ServiceStatus));
+                SetServiceUnavailable();
                 return;
             }
 
@@ -39,6 +37,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             if (!dashboardResponse.Success || dashboardResponse.Data is null)
             {
                 Dashboard.ServiceStatus = "Status indisponível";
+                Dashboard.CurrentOperation = "Não foi possível obter os dados";
                 OnPropertyChanged(nameof(ServiceStatus));
                 return;
             }
@@ -48,14 +47,21 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             if (snapshot is null)
             {
                 Dashboard.ServiceStatus = "Dados inválidos";
+                Dashboard.CurrentOperation = "Resposta inválida do Service";
                 OnPropertyChanged(nameof(ServiceStatus));
                 return;
             }
 
-            Dashboard.ServiceStatus = GetStatusName(snapshot.ServiceStatus);
-            Dashboard.CurrentOperation = snapshot.CurrentOperation;
+            ApplyDashboardSnapshot(snapshot);
+        }
+
+        #region Metodos Privados
+        private void ApplyDashboardSnapshot(DashboardSnapshot snapshot)
+        {
+            Dashboard.ServiceStatus = GetServiceStatusName(snapshot.ServiceStatus);
             Dashboard.IntegrityStatus = GetIntegrityStatusName(snapshot.IntegrityStatus);
             Dashboard.IntegrityMessage = GetIntegrityMessage(snapshot.IntegrityStatus);
+            Dashboard.CurrentOperation = string.IsNullOrWhiteSpace(snapshot.CurrentOperation) ? "Em espera" : snapshot.CurrentOperation;
             Dashboard.LastScan = snapshot.LastScanAt?.ToLocalTime().ToString("dd/MM/yyyy HH:mm") ?? "--";
             Dashboard.ScanProgress = snapshot.ScanProgress;
             Dashboard.FilesVerified = snapshot.FilesVerified;
@@ -66,8 +72,23 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             OnPropertyChanged(nameof(ServiceStatus));
         }
 
-        #region Metodos Privados
-        private static string GetStatusName(int status)
+        private void SetServiceUnavailable()
+        {
+            Dashboard.ServiceStatus = "Service indisponível";
+            Dashboard.IntegrityStatus = "Indisponível";
+            Dashboard.IntegrityMessage = "Não foi possível conectar ao Windows Integrity Guard Service.";
+            Dashboard.CurrentOperation = "Service indisponível";
+            Dashboard.LastScan = "--";
+            Dashboard.ScanProgress = null;
+            Dashboard.FilesVerified = null;
+            Dashboard.ProblemsFound = null;
+            Dashboard.ProblemsRepaired = null;
+            Dashboard.LastScanDuration = "--";
+
+            OnPropertyChanged(nameof(ServiceStatus));
+        }
+
+        private static string GetServiceStatusName(int status)
         {
             return status switch
             {
@@ -98,11 +119,13 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         {
             return status switch
             {
+                0 => "Aguardando uma verificação de integridade.",
+                1 => "Verificação de integridade em andamento.",
                 2 => "Nenhuma violação de integridade identificada.",
                 3 => "Foram identificados problemas de integridade.",
                 4 => "Não foi possível determinar a integridade do sistema.",
                 5 => "A verificação apresentou uma falha.",
-                _ => "Aguardando uma verificação de integridade."
+                _ => "Estado de integridade desconhecido."
             };
         }
         #endregion
