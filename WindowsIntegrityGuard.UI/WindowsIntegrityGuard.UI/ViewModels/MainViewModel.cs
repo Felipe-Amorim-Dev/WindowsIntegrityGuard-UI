@@ -34,30 +34,39 @@ namespace WindowsIntegrityGuard.UI.ViewModels
                 return;
             }
 
-            IpcResponse statusResponse = await _ipcClient.SendAsync("status");
+            IpcResponse dashboardResponse = await _ipcClient.SendAsync("dashboard");
 
-            if (!statusResponse.Success || statusResponse.Data is null)
+            if (!dashboardResponse.Success || dashboardResponse.Data is null)
             {
                 Dashboard.ServiceStatus = "Status indisponível";
                 OnPropertyChanged(nameof(ServiceStatus));
                 return;
             }
 
-            ServiceStatusSnapshot? snapshot = statusResponse.Data.Value.Deserialize<ServiceStatusSnapshot>();
+            DashboardSnapshot? snapshot = dashboardResponse.Data.Value.Deserialize<DashboardSnapshot>();
 
             if (snapshot is null)
             {
-                Dashboard.ServiceStatus = "Status inválido";
+                Dashboard.ServiceStatus = "Dados inválidos";
                 OnPropertyChanged(nameof(ServiceStatus));
                 return;
             }
 
-            Dashboard.ServiceStatus = GetStatusName(snapshot.Status);
-            Dashboard.CurrentOperation = GetOperationName(snapshot.Status);
+            Dashboard.ServiceStatus = GetStatusName(snapshot.ServiceStatus);
+            Dashboard.CurrentOperation = snapshot.CurrentOperation;
+            Dashboard.IntegrityStatus = GetIntegrityStatusName(snapshot.IntegrityStatus);
+            Dashboard.IntegrityMessage = GetIntegrityMessage(snapshot.IntegrityStatus);
+            Dashboard.LastScan = snapshot.LastScanAt?.ToLocalTime().ToString("dd/MM/yyyy HH:mm") ?? "--";
+            Dashboard.ScanProgress = snapshot.ScanProgress;
+            Dashboard.FilesVerified = snapshot.FilesVerified;
+            Dashboard.ProblemsFound = snapshot.ProblemsFound;
+            Dashboard.ProblemsRepaired = snapshot.ProblemsRepaired;
+            Dashboard.LastScanDuration = snapshot.LastScanDuration?.ToString(@"hh\:mm\:ss") ?? "--";
 
             OnPropertyChanged(nameof(ServiceStatus));
         }
 
+        #region Metodos Privados
         private static string GetStatusName(int status)
         {
             return status switch
@@ -71,17 +80,31 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             };
         }
 
-        private static string GetOperationName(int status)
+        private static string GetIntegrityStatusName(int status)
         {
             return status switch
             {
-                0 => "Em espera",
-                1 => "Verificação em andamento",
-                2 => "Reparação em andamento",
-                3 => "Operação concluída",
-                4 => "Falha na operação",
-                _ => "Estado desconhecido"
+                0 => "Não iniciado",
+                1 => "Verificando",
+                2 => "Íntegro",
+                3 => "Corrupção detectada",
+                4 => "Inconclusivo",
+                5 => "Falha",
+                _ => "Desconhecido"
             };
         }
+
+        private static string GetIntegrityMessage(int status)
+        {
+            return status switch
+            {
+                2 => "Nenhuma violação de integridade identificada.",
+                3 => "Foram identificados problemas de integridade.",
+                4 => "Não foi possível determinar a integridade do sistema.",
+                5 => "A verificação apresentou uma falha.",
+                _ => "Aguardando uma verificação de integridade."
+            };
+        }
+        #endregion
     }
 }

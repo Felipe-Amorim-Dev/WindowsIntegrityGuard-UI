@@ -13,6 +13,11 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         private string _integrityMessage = "Nenhum resultado disponível.";
         private string _lastScan = "--";
         private string _currentOperation = "Em espera";
+        private double? _scanProgress;
+        private int? _filesVerified;
+        private int? _problemsFound;
+        private int? _problemsRepaired;
+        private string _lastScanDuration = "--";
 
         public string ServiceStatus
         {
@@ -42,6 +47,36 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         {
             get => _currentOperation;
             set => SetProperty(ref _currentOperation, value);
+        }
+
+        public double? ScanProgress
+        {
+            get => _scanProgress;
+            set => SetProperty(ref _scanProgress, value);
+        }
+
+        public int? FilesVerified
+        {
+            get => _filesVerified;
+            set => SetProperty(ref _filesVerified, value);
+        }
+
+        public int? ProblemsFound
+        {
+            get => _problemsFound;
+            set => SetProperty(ref _problemsFound, value);
+        }
+
+        public int? ProblemsRepaired
+        {
+            get => _problemsRepaired;
+            set => SetProperty(ref _problemsRepaired, value);
+        }
+
+        public string LastScanDuration
+        {
+            get => _lastScanDuration;
+            set => SetProperty(ref _lastScanDuration, value);
         }
     }
 }
