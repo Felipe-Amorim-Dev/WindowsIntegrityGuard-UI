@@ -15,13 +15,14 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         private readonly CancellationTokenSource _monitoringCancellationTokenSource = new();
         private bool _monitoringStarted;
 
-        public DashboardViewModel Dashboard { get; } = new();
+        public DashboardViewModel Dashboard { get; }
 
         public string ServiceStatus => Dashboard.ServiceStatus;
 
         public MainViewModel(IIpcClient ipcClient)
         {
             _ipcClient = ipcClient;
+            Dashboard = new DashboardViewModel(ipcClient);
         }
 
         public async Task InitializeAsync()

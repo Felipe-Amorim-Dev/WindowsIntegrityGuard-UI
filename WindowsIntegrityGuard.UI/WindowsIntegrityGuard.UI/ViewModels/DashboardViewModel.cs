@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using WindowsIntegrityGuard.UI.Commands;
+using WindowsIntegrityGuard.UI.Models.Ipc;
+using WindowsIntegrityGuard.UI.Services;
 
 namespace WindowsIntegrityGuard.UI.ViewModels
 {
@@ -18,11 +22,24 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         private int? _problemsFound;
         private int? _problemsRepaired;
         private string _lastScanDuration = "--";
+        private readonly IIpcClient _ipcClient;
+
+        public DashboardViewModel(IIpcClient ipcClient)
+        {
+            _ipcClient = ipcClient;
+            StartScanCommand = new AsyncRelayCommand(StartScanAsync, CanStartScan);
+        }
 
         public string ServiceStatus
         {
             get => _serviceStatus;
-            set => SetProperty(ref _serviceStatus, value);
+            set
+            {
+                if (SetProperty(ref _serviceStatus, value))
+                {
+                    RaiseStartScanCanExecuteChanged();
+                }
+            }
         }
 
         public string IntegrityStatus
@@ -46,7 +63,13 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         public string CurrentOperation
         {
             get => _currentOperation;
-            set => SetProperty(ref _currentOperation, value);
+            set
+            {
+                if (SetProperty(ref _currentOperation, value))
+                {
+                    RaiseStartScanCanExecuteChanged();
+                }
+            }
         }
 
         public double? ScanProgress
@@ -78,5 +101,40 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             get => _lastScanDuration;
             set => SetProperty(ref _lastScanDuration, value);
         }
+
+        public ICommand StartScanCommand { get; }
+
+        #region Metodos Privados
+        private bool CanStartScan()
+        {
+            return CurrentOperation != "Verificação em andamento" &&
+                   CurrentOperation != "Reparação em andamento" &&
+                   ServiceStatus != "Service indisponível";
+        }
+
+        private async Task StartScanAsync()
+        {
+            IpcResponse response = await _ipcClient.SendAsync("start-scan");
+
+            if (!response.Success)
+            {
+                IntegrityMessage = response.Message;
+                return;
+            }
+
+            CurrentOperation = "Verificação em andamento";
+            IntegrityStatus = "Verificando";
+            IntegrityMessage = "A verificação foi solicitada ao Service.";
+        }
+
+        private void RaiseStartScanCanExecuteChanged()
+        {
+            if (StartScanCommand is AsyncRelayCommand command)
+            {
+                command.RaiseCanExecuteChanged();
+            }
+        }
+
+        #endregion
     }
 }
