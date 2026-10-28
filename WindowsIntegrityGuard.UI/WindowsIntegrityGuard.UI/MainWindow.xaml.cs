@@ -28,8 +28,8 @@ namespace WindowsIntegrityGuard.UI
         {
             InitializeComponent();
 
-            _viewModel = new MainViewModel(new NamedPipeClient());
             _trayIconService = new TrayIconService(this, ShutdownApplication);
+            _viewModel = new MainViewModel(new NamedPipeClient(), _trayIconService);
 
             DataContext = _viewModel;
 

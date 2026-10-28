@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace WindowsIntegrityGuard.UI.Services
 {
-    public sealed class TrayIconService : IDisposable
+    public sealed class TrayIconService : INotificationService, IDisposable
     {
         private readonly NotifyIcon _notifyIcon;
         private readonly Window _mainWindow;
@@ -61,18 +61,46 @@ namespace WindowsIntegrityGuard.UI.Services
             _mainWindow.Hide();
         }
 
+        public void ShowInformation(string title, string message)
+        {
+            ShowNotification(title, message, ToolTipIcon.Info);
+        }
+
+        public void ShowWarning(string title, string message)
+        {
+            ShowNotification(title, message, ToolTipIcon.Warning);
+        }
+
+        public void ShowError(string title, string message)
+        {
+            ShowNotification(title, message, ToolTipIcon.Error);
+        }
+
+        public void Dispose()
+        {
+            _notifyIcon.Visible = false;
+            _notifyIcon.Dispose();
+        }
+
         #region Metodos privados
 
         private void ExitApplication()
         {
             _exitAction();
         }
-        #endregion
 
-        public void Dispose()
+        private void ShowNotification(string title, string message, ToolTipIcon icon)
         {
-            _notifyIcon.Visible = false;
-            _notifyIcon.Dispose();
-        }        
+            if (!_notifyIcon.Visible)
+            {
+                return;
+            }
+
+            _notifyIcon.BalloonTipTitle = title;
+            _notifyIcon.BalloonTipText = message;
+            _notifyIcon.BalloonTipIcon = icon;
+            _notifyIcon.ShowBalloonTip(5000);
+        }
+        #endregion              
     }
 }

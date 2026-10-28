@@ -17,14 +17,20 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         private readonly CancellationTokenSource _monitoringCancellationTokenSource = new();
         private bool _monitoringStarted;
         private object _currentViewModel;
+        private readonly INotificationService _notificationService;
+        private int? _previousIntegrityStatus;
+        private bool _serviceWasAvailable;
+        private bool _initialSnapshotReceived;
 
         public DashboardViewModel Dashboard { get; }
 
         public string ServiceStatus => Dashboard.ServiceStatus;
 
-        public MainViewModel(IIpcClient ipcClient)
+        public MainViewModel(IIpcClient ipcClient, INotificationService notificationService)
         {
             _ipcClient = ipcClient;
+            _notificationService = notificationService;
+
             Dashboard = new DashboardViewModel(ipcClient);
             History = new HistoryViewModel(ipcClient);
 
@@ -41,6 +47,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         public async Task InitializeAsync()
         {
+            await Settings.LoadAsync();
             await RefreshDashboardAsync();
 
             if (!_monitoringStarted)
@@ -128,6 +135,8 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         private void ApplyDashboardSnapshot(DashboardSnapshot snapshot)
         {
+            HandleStateNotifications(snapshot);
+
             Dashboard.ServiceStatus = GetServiceStatusName(snapshot.ServiceStatus);
             Dashboard.IntegrityStatus = GetIntegrityStatusName(snapshot.IntegrityStatus);
             Dashboard.IntegrityMessage = GetIntegrityMessage(snapshot.IntegrityStatus);
@@ -139,11 +148,22 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             Dashboard.ProblemsRepaired = snapshot.ProblemsRepaired;
             Dashboard.LastScanDuration = snapshot.LastScanDuration?.ToString(@"hh\:mm\:ss") ?? "--";
 
+            _previousIntegrityStatus = snapshot.IntegrityStatus;
+            _serviceWasAvailable = true;
+            _initialSnapshotReceived = true;
+
             OnPropertyChanged(nameof(ServiceStatus));
         }
 
         private void SetServiceUnavailable()
         {
+            if (_serviceWasAvailable && _initialSnapshotReceived && Settings.ShowNotifications)
+            {
+                _notificationService.ShowError("Windows Integrity Guard", "O Service deixou de responder.");
+            }
+
+            _serviceWasAvailable = false;
+
             Dashboard.ServiceStatus = "Service indisponível";
             Dashboard.IntegrityStatus = "Indisponível";
             Dashboard.IntegrityMessage = "Não foi possível conectar ao Windows Integrity Guard Service.";
@@ -217,6 +237,38 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         {
             CurrentViewModel = Settings;
             await Settings.LoadAsync();
+        }
+
+        private void HandleStateNotifications(DashboardSnapshot snapshot)
+        {
+            if (!_initialSnapshotReceived || !Settings.ShowNotifications)
+            {
+                return;
+            }
+
+            if (_previousIntegrityStatus == snapshot.IntegrityStatus)
+            {
+                return;
+            }
+
+            switch (snapshot.IntegrityStatus)
+            {
+                case 2:
+                    _notificationService.ShowInformation("Windows Integrity Guard", "Verificação concluída. O sistema está íntegro.");
+                    break;
+
+                case 3:
+                    _notificationService.ShowWarning("Windows Integrity Guard", "A verificação encontrou problemas de integridade.");
+                    break;
+
+                case 4:
+                    _notificationService.ShowWarning("Windows Integrity Guard", "A verificação terminou com resultado inconclusivo.");
+                    break;
+
+                case 5:
+                    _notificationService.ShowError("Windows Integrity Guard", "Ocorreu uma falha durante a verificação.");
+                    break;
+            }
         }
         #endregion
 
