@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         xmlns:views="clr-namespace:WindowsIntegrityGuard.UI.Views"
+        xmlns:viewModels="clr-namespace:WindowsIntegrityGuard.UI.ViewModels"
         Title="Windows Integrity Guard"
         Width="1280"
         Height="820"
@@ -12,6 +13,16 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ResizeMode="CanResize">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:DashboardViewModel}">
+            <views:DashboardView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:HistoryViewModel}">
+            <views:HistoryView/>
+        </DataTemplate>
+    </Window.Resources>
 
     <shell:WindowChrome.WindowChrome>
         <shell:WindowChrome CaptionHeight="50"
@@ -143,11 +154,9 @@
 
                         <StackPanel Margin="14,22,14,0">
 
-                            <Button Style="{StaticResource NavigationButtonStyle}"
-                                    Content="⌂    Início"/>
+                            <Button Style="{StaticResource NavigationButtonStyle}" Content="⌂    Início" Command="{Binding ShowDashboardCommand}"/>
 
-                            <Button Style="{StaticResource NavigationButtonStyle}"
-                                    Content="◷    Histórico"/>
+                            <Button Style="{StaticResource NavigationButtonStyle}" Content="◷    Histórico" Command="{Binding ShowHistoryCommand}"/>
 
                             <Button Style="{StaticResource NavigationButtonStyle}"
                                     Content="⚙    Configurações"/>
@@ -173,19 +182,9 @@
                 </Border>
 
                 <!-- MAIN AREA -->
-                <ScrollViewer Grid.Column="1"
-                              VerticalScrollBarVisibility="Auto">
-
+                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <Grid Margin="22">
-                        <StackPanel>
-                            <TextBlock Text="Visão geral"
-                   Foreground="White"
-                   FontSize="26"
-                   FontWeight="SemiBold"
-                   Margin="0,0,0,20"/>
-
-                            <views:DashboardView DataContext="{Binding Dashboard}"/>
-                        </StackPanel>
+                        <ContentControl Content="{Binding CurrentViewModel}"/>
                     </Grid>
                 </ScrollViewer>
             </Grid>

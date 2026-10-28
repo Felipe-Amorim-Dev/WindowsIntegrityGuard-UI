@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using WindowsIntegrityGuard.UI.Models.Ipc;
 using WindowsIntegrityGuard.UI.Services;
+using WindowsIntegrityGuard.UI.Commands;
+using System.Windows.Input;
 
 namespace WindowsIntegrityGuard.UI.ViewModels
 {
@@ -14,6 +16,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         private readonly IIpcClient _ipcClient;
         private readonly CancellationTokenSource _monitoringCancellationTokenSource = new();
         private bool _monitoringStarted;
+        private object _currentViewModel;
 
         public DashboardViewModel Dashboard { get; }
 
@@ -23,6 +26,10 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         {
             _ipcClient = ipcClient;
             Dashboard = new DashboardViewModel(ipcClient);
+            History = new HistoryViewModel(ipcClient);
+            _currentViewModel = Dashboard;
+            ShowDashboardCommand = new RelayCommand(ShowDashboard);
+            ShowHistoryCommand = new AsyncRelayCommand(ShowHistoryAsync);
         }
 
         public async Task InitializeAsync()
@@ -35,6 +42,17 @@ namespace WindowsIntegrityGuard.UI.ViewModels
                 _ = MonitorDashboardAsync(_monitoringCancellationTokenSource.Token);
             }
         }
+
+        public HistoryViewModel History { get; }
+
+        public object CurrentViewModel
+        {
+            get => _currentViewModel;
+            set => SetProperty(ref _currentViewModel, value);
+        }
+
+        public ICommand ShowDashboardCommand { get; }
+        public ICommand ShowHistoryCommand { get; }
 
         #region Metodos Privados
         private async Task MonitorDashboardAsync(CancellationToken cancellationToken)
@@ -172,6 +190,17 @@ namespace WindowsIntegrityGuard.UI.ViewModels
                 5 => "A verificação apresentou uma falha.",
                 _ => "Estado de integridade desconhecido."
             };
+        }
+
+        private void ShowDashboard()
+        {
+            CurrentViewModel = Dashboard;
+        }
+
+        private async Task ShowHistoryAsync()
+        {
+            CurrentViewModel = History;
+            await History.LoadAsync();
         }
         #endregion
 
