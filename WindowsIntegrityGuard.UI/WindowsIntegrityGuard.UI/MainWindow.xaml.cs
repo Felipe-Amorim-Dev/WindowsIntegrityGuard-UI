@@ -76,7 +76,7 @@ namespace WindowsIntegrityGuard.UI
             _trayIconService.HideWindow();
         }
 
-        private void Button_Click()
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
 
         }

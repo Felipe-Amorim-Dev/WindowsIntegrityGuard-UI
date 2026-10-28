@@ -27,9 +27,15 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             _ipcClient = ipcClient;
             Dashboard = new DashboardViewModel(ipcClient);
             History = new HistoryViewModel(ipcClient);
+
+            ISettingsService settingsService = new SettingsService();
+            Settings = new SettingsViewModel(settingsService);
+
             _currentViewModel = Dashboard;
+
             ShowDashboardCommand = new RelayCommand(ShowDashboard);
             ShowHistoryCommand = new AsyncRelayCommand(ShowHistoryAsync);
+            ShowSettingsCommand = new AsyncRelayCommand(ShowSettingsAsync);
         }
 
         public async Task InitializeAsync()
@@ -53,6 +59,9 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         public ICommand ShowDashboardCommand { get; }
         public ICommand ShowHistoryCommand { get; }
+
+        public SettingsViewModel Settings { get; }
+        public ICommand ShowSettingsCommand { get; }
 
         #region Metodos Privados
         private async Task MonitorDashboardAsync(CancellationToken cancellationToken)
@@ -201,6 +210,12 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         {
             CurrentViewModel = History;
             await History.LoadAsync();
+        }
+
+        private async Task ShowSettingsAsync()
+        {
+            CurrentViewModel = Settings;
+            await Settings.LoadAsync();
         }
         #endregion
 

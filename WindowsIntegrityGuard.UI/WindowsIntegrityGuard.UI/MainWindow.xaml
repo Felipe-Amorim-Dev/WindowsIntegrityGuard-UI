@@ -22,6 +22,10 @@
         <DataTemplate DataType="{x:Type viewModels:HistoryViewModel}">
             <views:HistoryView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+            <views:SettingsView/>
+        </DataTemplate>
     </Window.Resources>
 
     <shell:WindowChrome.WindowChrome>
@@ -156,10 +160,9 @@
 
                             <Button Style="{StaticResource NavigationButtonStyle}" Content="⌂    Início" Command="{Binding ShowDashboardCommand}"/>
 
-                            <Button Style="{StaticResource NavigationButtonStyle}" Content="◷    Histórico" Command="{Binding ShowHistoryCommand}"/>
+                            <Button Style="{StaticResource NavigationButtonStyle}" Content="◷    Histórico" Command="{Binding ShowHistoryCommand}" Click="Button_Click"/>
 
-                            <Button Style="{StaticResource NavigationButtonStyle}"
-                                    Content="⚙    Configurações"/>
+                            <Button Style="{StaticResource NavigationButtonStyle}" Content="⚙    Configurações" Command="{Binding ShowSettingsCommand}"/>
 
                             <Button Style="{StaticResource NavigationButtonStyle}"
                                     Content="ⓘ    Sobre"/>
