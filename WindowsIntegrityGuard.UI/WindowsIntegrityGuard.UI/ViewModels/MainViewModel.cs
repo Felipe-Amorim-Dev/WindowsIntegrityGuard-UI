@@ -38,11 +38,14 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             IStartupService startupService = new StartupService();
             Settings = new SettingsViewModel(settingsService, startupService);
 
+            About = new AboutViewModel();
+
             _currentViewModel = Dashboard;
 
             ShowDashboardCommand = new RelayCommand(ShowDashboard);
             ShowHistoryCommand = new AsyncRelayCommand(ShowHistoryAsync);
             ShowSettingsCommand = new AsyncRelayCommand(ShowSettingsAsync);
+            ShowAboutCommand = new RelayCommand(ShowAbout);
         }
 
         public async Task InitializeAsync()
@@ -70,6 +73,9 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         public SettingsViewModel Settings { get; }
         public ICommand ShowSettingsCommand { get; }
+
+        public AboutViewModel About { get; }
+        public ICommand ShowAboutCommand { get; }
 
         #region Metodos Privados
         private async Task MonitorDashboardAsync(CancellationToken cancellationToken)

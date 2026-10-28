@@ -26,6 +26,10 @@
         <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
             <views:SettingsView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:AboutViewModel}">
+            <views:AboutView/>
+        </DataTemplate>
     </Window.Resources>
 
     <shell:WindowChrome.WindowChrome>
@@ -164,8 +168,7 @@
 
                             <Button Style="{StaticResource NavigationButtonStyle}" Content="⚙    Configurações" Command="{Binding ShowSettingsCommand}"/>
 
-                            <Button Style="{StaticResource NavigationButtonStyle}"
-                                    Content="ⓘ    Sobre"/>
+                            <Button Style="{StaticResource NavigationButtonStyle}" Content="ⓘ    Sobre" Command="{Binding ShowAboutCommand}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="1"
