@@ -39,15 +39,21 @@ namespace WindowsIntegrityGuard.UI
 
         public void ShutdownApplication()
         {
+            _isExiting = true;
             _viewModel.Dispose();
             _trayIconService.Dispose();
-
             System.Windows.Application.Current.Shutdown();
         }
 
+        #region Metodos Privados  
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await _viewModel.InitializeAsync();
+
+            if (_viewModel.Settings.StartMinimized)
+            {
+                Hide();
+            }
         }
 
         private void MainWindow_Closing(object? sender, CancelEventArgs e)
@@ -57,8 +63,14 @@ namespace WindowsIntegrityGuard.UI
                 return;
             }
 
-            e.Cancel = true;
-            _trayIconService.HideWindow();
+            if (_viewModel.Settings.MinimizeToTray)
+            {
+                e.Cancel = true;
+                Hide();
+                return;
+            }
+
+            ShutdownApplication();
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
@@ -73,12 +85,13 @@ namespace WindowsIntegrityGuard.UI
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            _trayIconService.HideWindow();
+            Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-        }
+        }        
+        #endregion
     }
 }

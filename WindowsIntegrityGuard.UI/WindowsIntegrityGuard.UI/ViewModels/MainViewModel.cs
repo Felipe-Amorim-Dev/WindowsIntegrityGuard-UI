@@ -29,7 +29,8 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             History = new HistoryViewModel(ipcClient);
 
             ISettingsService settingsService = new SettingsService();
-            Settings = new SettingsViewModel(settingsService);
+            IStartupService startupService = new StartupService();
+            Settings = new SettingsViewModel(settingsService, startupService);
 
             _currentViewModel = Dashboard;
 

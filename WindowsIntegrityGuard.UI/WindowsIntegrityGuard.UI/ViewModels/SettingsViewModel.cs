@@ -16,10 +16,12 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         private bool _minimizeToTray;
         private bool _showNotifications;
         private bool _isLoaded;
+        private readonly IStartupService _startupService;
 
-        public SettingsViewModel(ISettingsService settingsService)
+        public SettingsViewModel(ISettingsService settingsService, IStartupService startupService)
         {
             _settingsService = settingsService;
+            _startupService = startupService;
         }
 
         public bool StartWithWindows
@@ -29,6 +31,11 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             {
                 if (SetProperty(ref _startWithWindows, value))
                 {
+                    if (_isLoaded)
+                    {
+                        _startupService.SetEnabled(value);
+                    }
+
                     _ = SaveAsync();
                 }
             }
@@ -76,7 +83,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
             _isLoaded = false;
 
-            StartWithWindows = settings.StartWithWindows;
+            StartWithWindows = _startupService.IsEnabled();
             StartMinimized = settings.StartMinimized;
             MinimizeToTray = settings.MinimizeToTray;
             ShowNotifications = settings.ShowNotifications;
