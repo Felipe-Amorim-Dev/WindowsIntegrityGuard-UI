@@ -37,7 +37,7 @@ namespace WindowsIntegrityGuard.UI.Services
                     throw new InvalidOperationException("Não foi possível localizar o executável da aplicação.");
                 }
 
-                key.SetValue(ApplicationName, $"\"{executablePath}\"");
+                key.SetValue(ApplicationName, $"\"{executablePath}\" --startup");
                 return;
             }
 

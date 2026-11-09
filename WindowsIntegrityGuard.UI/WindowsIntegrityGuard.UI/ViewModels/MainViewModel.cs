@@ -276,6 +276,12 @@ namespace WindowsIntegrityGuard.UI.ViewModels
                     break;
             }
         }
+
+        private void ShowAbout()
+        {
+            About.ServiceStatus = Dashboard.ServiceStatus;
+            CurrentViewModel = About;
+        }
         #endregion
 
         public void Dispose()

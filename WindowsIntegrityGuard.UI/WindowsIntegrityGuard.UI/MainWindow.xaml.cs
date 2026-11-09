@@ -46,11 +46,23 @@ namespace WindowsIntegrityGuard.UI
         }
 
         #region Metodos Privados  
+        //private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    await _viewModel.InitializeAsync();
+
+        //    if (_viewModel.Settings.StartMinimized)
+        //    {
+        //        Hide();
+        //    }
+        //}
+
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await _viewModel.InitializeAsync();
 
-            if (_viewModel.Settings.StartMinimized)
+            bool startedWithWindows = Environment.GetCommandLineArgs().Any(x => string.Equals(x, "--startup", StringComparison.OrdinalIgnoreCase));
+
+            if (startedWithWindows && _viewModel.Settings.StartMinimized)
             {
                 Hide();
             }

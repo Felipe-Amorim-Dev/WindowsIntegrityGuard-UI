@@ -1,12 +1,26 @@
-﻿<UserControl x:Class="WindowsIntegrityGuard.UI.Views.SettingsView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WindowsIntegrityGuard.UI.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+﻿<UserControl x:Class="WindowsIntegrityGuard.UI.Views.SettingsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="Transparent">
+    <StackPanel>
+        <TextBlock Text="Configurações" Foreground="White" FontSize="28" FontWeight="SemiBold"/>
+        <TextBlock Text="Personalize o comportamento do Windows Integrity Guard." Foreground="#8FA6BA" FontSize="13" Margin="0,6,0,24"/>
+
+        <Border Style="{StaticResource DashboardCardStyle}" Margin="0,0,0,16">
+            <StackPanel>
+                <TextBlock Text="Inicialização" Style="{StaticResource DashboardTitleStyle}"/>
+                <TextBlock Text="Defina como a interface deve iniciar no Windows." Style="{StaticResource DashboardDescriptionStyle}" Margin="0,6,0,18"/>
+
+                <CheckBox Content="Iniciar com o Windows" IsChecked="{Binding StartWithWindows}" Foreground="White" Margin="0,0,0,14"/>
+                <CheckBox Content="Iniciar minimizado na traybar" IsChecked="{Binding StartMinimized}" Foreground="White"/>
+            </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource DashboardCardStyle}">
+            <StackPanel>
+                <TextBlock Text="Comportamento" Style="{StaticResource DashboardTitleStyle}"/>
+                <TextBlock Text="Configure o comportamento da interface durante o uso." Style="{StaticResource DashboardDescriptionStyle}" Margin="0,6,0,18"/>
+
+                <CheckBox Content="Manter na traybar ao fechar a janela" IsChecked="{Binding MinimizeToTray}" Foreground="White" Margin="0,0,0,14"/>
+                <CheckBox Content="Exibir notificações de estado" IsChecked="{Binding ShowNotifications}" Foreground="White"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </UserControl>
