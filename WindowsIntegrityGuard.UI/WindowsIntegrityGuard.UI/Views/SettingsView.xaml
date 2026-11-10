@@ -4,39 +4,244 @@
              Background="Transparent">
 
     <StackPanel>
-        <TextBlock Text="Configurações" Foreground="White" FontSize="28" FontWeight="SemiBold"/>
-        <TextBlock Text="Personalize o comportamento do Windows Integrity Guard." Foreground="#8FA6BA" FontSize="13" Margin="0,6,0,24"/>
 
-        <Border Style="{StaticResource DashboardCardStyle}" Margin="0,0,0,16">
+        <!-- HEADER -->
+        <StackPanel Margin="0,0,0,24">
+            <TextBlock Text="Configurações"
+                       Style="{StaticResource PageTitleStyle}"/>
+
+            <TextBlock Text="Personalize o comportamento do Windows Integrity Guard."
+                       Style="{StaticResource PageDescriptionStyle}"
+                       Margin="0,6,0,0"/>
+        </StackPanel>
+
+        <!-- INICIALIZAÇÃO -->
+        <Border Style="{StaticResource DashboardCardStyle}"
+                Margin="0,0,0,16">
+
             <StackPanel>
-                <TextBlock Text="Inicialização" Style="{StaticResource DashboardTitleStyle}"/>
-                <TextBlock Text="Defina como a interface deve iniciar no Windows." Style="{StaticResource DashboardDescriptionStyle}" Margin="0,6,0,18"/>
 
-                <CheckBox Content="Iniciar com o Windows"
-                          IsChecked="{Binding StartWithWindows}"
-                          Foreground="White"
-                          Margin="0,0,0,14"/>
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <CheckBox Content="Iniciar minimizado na traybar"
-                          IsChecked="{Binding StartMinimized}"
-                          Foreground="White"/>
+                    <Border Width="46"
+                            Height="46"
+                            Background="#33425C"
+                            CornerRadius="12">
+
+                        <TextBlock Text="&#xE7E8;"
+                                   FontFamily="Segoe Fluent Icons"
+                                   Foreground="{StaticResource CyanAccentBrush}"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="2"
+                                VerticalAlignment="Center">
+
+                        <TextBlock Text="Inicialização"
+                                   Style="{StaticResource DashboardTitleStyle}"/>
+
+                        <TextBlock Text="Configure como a aplicação será iniciada."
+                                   Style="{StaticResource DashboardDescriptionStyle}"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- START WITH WINDOWS -->
+                <Grid Margin="0,0,0,18">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="Iniciar com o Windows"
+                                   Foreground="{StaticResource PrimaryTextBrush}"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"/>
+
+                        <TextBlock Text="Inicia automaticamente o Windows Integrity Guard ao entrar no Windows."
+                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                   FontSize="13"
+                                   Margin="0,4,20,0"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <CheckBox Grid.Column="1"
+                              IsChecked="{Binding StartWithWindows}"
+                              Style="{StaticResource ToggleSwitchStyle}"
+                              VerticalAlignment="Center"/>
+                </Grid>
+
+                <Border Height="1"
+                        Background="#394561"
+                        Margin="0,0,0,18"/>
+
+                <!-- START MINIMIZED -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="Iniciar minimizado"
+                                   Foreground="{StaticResource PrimaryTextBrush}"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"/>
+
+                        <TextBlock Text="Oculta a janela ao iniciar automaticamente pelo Windows e mantém a aplicação na traybar."
+                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                   FontSize="13"
+                                   Margin="0,4,20,0"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <CheckBox Grid.Column="1"
+                              IsChecked="{Binding StartMinimized}"
+                              Style="{StaticResource ToggleSwitchStyle}"
+                              VerticalAlignment="Center"/>
+                </Grid>
+
             </StackPanel>
         </Border>
 
+        <!-- COMPORTAMENTO -->
+        <Border Style="{StaticResource DashboardCardStyle}"
+                Margin="0,0,0,16">
+
+            <StackPanel>
+
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Width="46"
+                            Height="46"
+                            Background="#3B3F59"
+                            CornerRadius="12">
+
+                        <TextBlock Text="&#xE713;"
+                                   FontFamily="Segoe Fluent Icons"
+                                   Foreground="{StaticResource BlueAccentBrush}"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="2"
+                                VerticalAlignment="Center">
+
+                        <TextBlock Text="Comportamento"
+                                   Style="{StaticResource DashboardTitleStyle}"/>
+
+                        <TextBlock Text="Defina como a interface deve se comportar durante o uso."
+                                   Style="{StaticResource DashboardDescriptionStyle}"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="Manter na traybar ao fechar"
+                                   Foreground="{StaticResource PrimaryTextBrush}"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"/>
+
+                        <TextBlock Text="Ao fechar a janela, mantém o Windows Integrity Guard ativo na área de notificação."
+                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                   FontSize="13"
+                                   Margin="0,4,20,0"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <CheckBox Grid.Column="1"
+                              IsChecked="{Binding MinimizeToTray}"
+                              Style="{StaticResource ToggleSwitchStyle}"
+                              VerticalAlignment="Center"/>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+
+        <!-- NOTIFICAÇÕES -->
         <Border Style="{StaticResource DashboardCardStyle}">
+
             <StackPanel>
-                <TextBlock Text="Comportamento" Style="{StaticResource DashboardTitleStyle}"/>
-                <TextBlock Text="Configure como a interface deve se comportar durante o uso." Style="{StaticResource DashboardDescriptionStyle}" Margin="0,6,0,18"/>
 
-                <CheckBox Content="Manter na traybar ao fechar a janela"
-                          IsChecked="{Binding MinimizeToTray}"
-                          Foreground="White"
-                          Margin="0,0,0,14"/>
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <CheckBox Content="Exibir notificações de estado"
-                          IsChecked="{Binding ShowNotifications}"
-                          Foreground="White"/>
+                    <Border Width="46"
+                            Height="46"
+                            Background="#4D4634"
+                            CornerRadius="12">
+
+                        <TextBlock Text="&#xEA8F;"
+                                   FontFamily="Segoe Fluent Icons"
+                                   Foreground="{StaticResource YellowAccentBrush}"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="2"
+                                VerticalAlignment="Center">
+
+                        <TextBlock Text="Notificações"
+                                   Style="{StaticResource DashboardTitleStyle}"/>
+
+                        <TextBlock Text="Controle os avisos exibidos pela aplicação."
+                                   Style="{StaticResource DashboardDescriptionStyle}"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="Exibir notificações"
+                                   Foreground="{StaticResource PrimaryTextBrush}"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"/>
+
+                        <TextBlock Text="Exibe notificações quando uma verificação termina, encontra problemas ou quando o Service fica indisponível."
+                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                   FontSize="13"
+                                   Margin="0,4,20,0"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <CheckBox Grid.Column="1"
+                              IsChecked="{Binding ShowNotifications}"
+                              Style="{StaticResource ToggleSwitchStyle}"
+                              VerticalAlignment="Center"/>
+                </Grid>
+
             </StackPanel>
         </Border>
+
     </StackPanel>
 </UserControl>

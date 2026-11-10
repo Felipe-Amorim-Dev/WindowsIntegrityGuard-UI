@@ -4,55 +4,221 @@
              Background="Transparent">
 
     <StackPanel>
-        <TextBlock Text="Sobre" Foreground="White" FontSize="28" FontWeight="SemiBold"/>
-        <TextBlock Text="Informações sobre o Windows Integrity Guard." Foreground="#8FA6BA" FontSize="13" Margin="0,6,0,24"/>
 
-        <Border Style="{StaticResource DashboardCardStyle}" Margin="0,0,0,16">
-            <StackPanel>
-                <TextBlock Text="{Binding ApplicationName}" Foreground="White" FontSize="24" FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding Description}" Foreground="#8FA6BA" FontSize="13" Margin="0,8,0,0" TextWrapping="Wrap"/>
-            </StackPanel>
-        </Border>
+        <!-- HEADER -->
+        <StackPanel Margin="0,0,0,24">
+            <TextBlock Text="Sobre"
+                       Style="{StaticResource PageTitleStyle}"/>
 
-        <Border Style="{StaticResource DashboardCardStyle}" Margin="0,0,0,16">
+            <TextBlock Text="Informações sobre o Windows Integrity Guard."
+                       Style="{StaticResource PageDescriptionStyle}"
+                       Margin="0,6,0,0"/>
+        </StackPanel>
+
+        <!-- IDENTIDADE -->
+        <Border Style="{StaticResource DashboardCardStyle}"
+                Margin="0,0,0,16">
+
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="180"/>
+                    <ColumnDefinition Width="90"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="38"/>
-                    <RowDefinition Height="38"/>
-                    <RowDefinition Height="38"/>
-                    <RowDefinition Height="38"/>
-                </Grid.RowDefinitions>
+                <Border Width="72"
+                        Height="72"
+                        Background="#D8F6E9"
+                        CornerRadius="20"
+                        VerticalAlignment="Top">
 
-                <TextBlock Grid.Row="0" Text="Versão" Style="{StaticResource DashboardDescriptionStyle}"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Version}" Foreground="White"/>
+                    <TextBlock Text="✓"
+                               Foreground="#1DB978"
+                               FontSize="44"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
 
-                <TextBlock Grid.Row="1" Text="Service" Style="{StaticResource DashboardDescriptionStyle}"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ServiceName}" Foreground="White"/>
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center">
 
-                <TextBlock Grid.Row="2" Text="Status do Service" Style="{StaticResource DashboardDescriptionStyle}"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ServiceStatus}" Foreground="White"/>
+                    <TextBlock Text="{Binding ApplicationName}"
+                               Foreground="{StaticResource PrimaryTextBrush}"
+                               FontSize="26"
+                               FontWeight="SemiBold"/>
 
-                <TextBlock Grid.Row="3" Text="Licença" Style="{StaticResource DashboardDescriptionStyle}"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding License}" Foreground="White"/>
+                    <TextBlock Text="{Binding Description}"
+                               Foreground="{StaticResource SecondaryTextBrush}"
+                               FontSize="14"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+
+                    <Border Background="#34405D"
+                            CornerRadius="8"
+                            Padding="10,5"
+                            HorizontalAlignment="Left"
+                            Margin="0,14,0,0">
+
+                        <TextBlock Text="{Binding Version, StringFormat=Versão {0}}"
+                                   Foreground="{StaticResource CyanAccentBrush}"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"/>
+                    </Border>
+
+                </StackPanel>
             </Grid>
         </Border>
 
-        <Border Style="{StaticResource DashboardCardStyle}">
-            <StackPanel>
-                <TextBlock Text="Projeto" Style="{StaticResource DashboardTitleStyle}"/>
-                <TextBlock Text="Código-fonte e documentação do Windows Integrity Guard." Style="{StaticResource DashboardDescriptionStyle}" Margin="0,6,0,16"/>
+        <!-- INFORMAÇÕES -->
+        <Grid Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <Button Content="Abrir repositório no GitHub"
+            <!-- SERVICE -->
+            <Border Grid.Column="0"
+                    Style="{StaticResource DashboardCardStyle}">
+
+                <StackPanel>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Service"
+                                   Style="{StaticResource DashboardTitleStyle}"/>
+
+                        <Border Grid.Column="1"
+                                Width="40"
+                                Height="40"
+                                Background="#33425C"
+                                CornerRadius="11">
+
+                            <TextBlock Text="&#xE90F;"
+                                       FontFamily="Segoe Fluent Icons"
+                                       Foreground="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                       FontSize="20"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+
+                    <TextBlock Text="{Binding ServiceName}"
+                               Foreground="{StaticResource SecondaryTextBrush}"
+                               FontSize="13"
+                               Margin="0,18,0,5"/>
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <Ellipse Width="9"
+                                 Height="9"
+                                 Fill="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                 VerticalAlignment="Center"
+                                 Margin="0,0,8,0"/>
+
+                        <TextBlock Text="{Binding ServiceStatus}"
+                                   Foreground="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- LICENÇA -->
+            <Border Grid.Column="2"
+                    Style="{StaticResource DashboardCardStyle}">
+
+                <StackPanel>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Licença"
+                                   Style="{StaticResource DashboardTitleStyle}"/>
+
+                        <Border Grid.Column="1"
+                                Width="40"
+                                Height="40"
+                                Background="#3F3D57"
+                                CornerRadius="11">
+
+                            <TextBlock Text="&#xE8A5;"
+                                       FontFamily="Segoe Fluent Icons"
+                                       Foreground="{StaticResource BlueAccentBrush}"
+                                       FontSize="20"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+
+                    <TextBlock Text="{Binding License}"
+                               Foreground="{StaticResource BlueAccentBrush}"
+                               FontSize="22"
+                               FontWeight="SemiBold"
+                               Margin="0,18,0,5"/>
+
+                    <TextBlock Text="Projeto distribuído sob licença MIT."
+                               Foreground="{StaticResource SecondaryTextBrush}"
+                               FontSize="13"/>
+
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- PROJETO -->
+        <Border Style="{StaticResource DashboardCardStyle}">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+
+                    <TextBlock Text="Projeto open source"
+                               Style="{StaticResource DashboardTitleStyle}"/>
+
+                    <TextBlock Text="Acesse o código-fonte, documentação e histórico de desenvolvimento no GitHub."
+                               Style="{StaticResource DashboardDescriptionStyle}"
+                               Margin="0,6,20,0"
+                               TextWrapping="Wrap"/>
+
+                    <TextBlock Text="{Binding RepositoryUrl}"
+                               Foreground="{StaticResource MutedTextBrush}"
+                               FontSize="12"
+                               Margin="0,12,20,0"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <Button Grid.Column="1"
                         Command="{Binding OpenRepositoryCommand}"
-                        Width="220"
-                        Height="40"
-                        HorizontalAlignment="Left"/>
-            </StackPanel>
+                        Style="{StaticResource SecondaryActionButtonStyle}"
+                        VerticalAlignment="Center">
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock Text="&#xE8A5;"
+                                   FontFamily="Segoe Fluent Icons"
+                                   FontSize="17"
+                                   Margin="0,0,10,0"
+                                   VerticalAlignment="Center"/>
+
+                        <TextBlock Text="Abrir no GitHub"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+            </Grid>
         </Border>
+
     </StackPanel>
 </UserControl>

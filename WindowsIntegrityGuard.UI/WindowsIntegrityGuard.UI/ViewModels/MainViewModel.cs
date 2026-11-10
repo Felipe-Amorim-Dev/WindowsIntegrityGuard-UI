@@ -144,6 +144,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             HandleStateNotifications(snapshot);
 
             Dashboard.ServiceStatus = GetServiceStatusName(snapshot.ServiceStatus);
+            About.ServiceStatus = Dashboard.ServiceStatus;
             Dashboard.IntegrityStatus = GetIntegrityStatusName(snapshot.IntegrityStatus);
             Dashboard.IntegrityMessage = GetIntegrityMessage(snapshot.IntegrityStatus);
             Dashboard.CurrentOperation = string.IsNullOrWhiteSpace(snapshot.CurrentOperation) ? "Em espera" : snapshot.CurrentOperation;
@@ -171,6 +172,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             _serviceWasAvailable = false;
 
             Dashboard.ServiceStatus = "Service indisponível";
+            About.ServiceStatus = "Service indisponível";
             Dashboard.IntegrityStatus = "Indisponível";
             Dashboard.IntegrityMessage = "Não foi possível conectar ao Windows Integrity Guard Service.";
             Dashboard.CurrentOperation = "Service indisponível";

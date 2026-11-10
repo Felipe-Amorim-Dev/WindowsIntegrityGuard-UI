@@ -62,32 +62,10 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
             foreach (ScanHistoryEntry entry in history.OrderByDescending(x => x.FinishedAt))
             {
-                Items.Add(new HistoryItemViewModel
-                {
-                    FinishedAt = entry.FinishedAt,
-                    Status = GetStatusName(entry.Status),
-                    Duration = entry.Duration.ToString(@"hh\:mm\:ss"),
-                    Message = entry.Message,
-                    ExitCode = entry.ExitCode?.ToString() ?? "--",
-                    RepairReview = entry.RequiresRepairReview ? "Sim" : "Não"
-                });
+                Items.Add(new HistoryItemViewModel(entry));
             }
 
             StatusMessage = $"{Items.Count} verificação(ões) encontrada(s).";
-        }
-
-        private static string GetStatusName(int status)
-        {
-            return status switch
-            {
-                0 => "Não iniciado",
-                1 => "Verificando",
-                2 => "Íntegro",
-                3 => "Corrupção detectada",
-                4 => "Inconclusivo",
-                5 => "Falha",
-                _ => "Desconhecido"
-            };
-        }
+        }       
     }
 }
