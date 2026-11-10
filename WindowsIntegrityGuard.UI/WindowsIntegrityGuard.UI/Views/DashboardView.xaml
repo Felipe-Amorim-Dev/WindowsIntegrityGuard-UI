@@ -64,15 +64,8 @@
                             HorizontalAlignment="Right">
 
                     <Button Content="▶  Verificar agora"
-                        Command="{Binding StartScanCommand}"
-                        Width="190"
-                        Height="48"
-                        Background="#52C5F4"
-                        Foreground="#07131D"
-                        BorderThickness="0"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Cursor="Hand"/>
+                            Command="{Binding StartScanCommand}"
+                            Style="{StaticResource PrimaryActionButtonStyle}"/>
 
                     <TextBlock Text="A verificação será executada pelo Service."
                                Foreground="#8196A9"

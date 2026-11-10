@@ -1,4 +1,8 @@
-﻿<UserControl x:Class="WindowsIntegrityGuard.UI.Views.AboutView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="Transparent">
+﻿<UserControl x:Class="WindowsIntegrityGuard.UI.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+
     <StackPanel>
         <TextBlock Text="Sobre" Foreground="White" FontSize="28" FontWeight="SemiBold"/>
         <TextBlock Text="Informações sobre o Windows Integrity Guard." Foreground="#8FA6BA" FontSize="13" Margin="0,6,0,24"/>
@@ -43,7 +47,11 @@
                 <TextBlock Text="Projeto" Style="{StaticResource DashboardTitleStyle}"/>
                 <TextBlock Text="Código-fonte e documentação do Windows Integrity Guard." Style="{StaticResource DashboardDescriptionStyle}" Margin="0,6,0,16"/>
 
-                <Button Content="Abrir repositório no GitHub" Command="{Binding OpenRepositoryCommand}" Width="220" Height="40" HorizontalAlignment="Left"/>
+                <Button Content="Abrir repositório no GitHub"
+                        Command="{Binding OpenRepositoryCommand}"
+                        Width="220"
+                        Height="40"
+                        HorizontalAlignment="Left"/>
             </StackPanel>
         </Border>
     </StackPanel>
