@@ -34,25 +34,25 @@
 
     <shell:WindowChrome.WindowChrome>
         <shell:WindowChrome CaptionHeight="44"
-                            CornerRadius="20"
+                            CornerRadius="40"
                             GlassFrameThickness="0"
                             ResizeBorderThickness="6"
                             UseAeroCaptionButtons="False"/>
     </shell:WindowChrome.WindowChrome>
 
     <Border Background="Transparent" CornerRadius="20">
-        <Grid Margin="18">
+        <Grid Margin="0">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="245"/>
-                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="285"/>
+                <ColumnDefinition Width="0"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- SIDEBAR -->
             <Border Grid.Column="0"
                     Background="{StaticResource SidebarBackgroundBrush}"
-                    CornerRadius="20"
+                    CornerRadius="20, 0, 0, 20"
                     Padding="20">
 
                 <Grid>
@@ -176,7 +176,7 @@
             <!-- PAINEL PRINCIPAL -->
             <Border Grid.Column="2"
                     Background="{StaticResource MainBackgroundBrush}"
-                    CornerRadius="20">
+                    CornerRadius="0, 20, 20, 0">
 
                 <Grid>
                     <Grid.RowDefinitions>

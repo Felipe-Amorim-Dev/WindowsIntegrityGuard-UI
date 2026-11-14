@@ -36,7 +36,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
             ISettingsService settingsService = new SettingsService();
             IStartupService startupService = new StartupService();
-            Settings = new SettingsViewModel(settingsService, startupService);
+            Settings = new SettingsViewModel(settingsService, startupService, ipcClient);
 
             About = new AboutViewModel();
 

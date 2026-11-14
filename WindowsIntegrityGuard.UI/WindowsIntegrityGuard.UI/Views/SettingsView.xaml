@@ -112,6 +112,42 @@
             </StackPanel>
         </Border>
 
+        <!-- VERIFICAÇÃO AUTOMÁTICA -->
+        <Border Style="{StaticResource DashboardCardStyle}" Margin="0,0,0,16">
+            <StackPanel>
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Width="46" Height="46" Background="#334B48" CornerRadius="12">
+                        <TextBlock Text="&#xE9D9;" FontFamily="Segoe Fluent Icons" Foreground="{StaticResource GreenAccentBrush}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <TextBlock Text="Verificação automática" Style="{StaticResource DashboardTitleStyle}"/>
+                        <TextBlock Text="Configure a verificação automática após a inicialização do Windows." Style="{StaticResource DashboardDescriptionStyle}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="Verificar integridade após iniciar o Windows" Foreground="{StaticResource PrimaryTextBrush}" FontSize="15" FontWeight="SemiBold"/>
+                        <TextBlock Text="Quando habilitado, o Service aguarda 2 minutos após a inicialização antes de executar uma verificação de integridade." Foreground="{StaticResource SecondaryTextBrush}" FontSize="13" Margin="0,4,20,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <CheckBox Grid.Column="1" IsChecked="{Binding ScanOnStartup}" Style="{StaticResource ToggleSwitchStyle}" VerticalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
         <!-- COMPORTAMENTO -->
         <Border Style="{StaticResource DashboardCardStyle}"
                 Margin="0,0,0,16">
