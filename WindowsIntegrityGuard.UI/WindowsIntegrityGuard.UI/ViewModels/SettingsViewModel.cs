@@ -84,29 +84,36 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         public async Task LoadAsync()
         {
-            AppSettings settings = await _settingsService.LoadAsync();
-
             _isLoaded = false;
+
+            AppSettings settings = await _settingsService.LoadAsync();                       
 
             StartWithWindows = _startupService.IsEnabled();
             StartMinimized = settings.StartMinimized;
             MinimizeToTray = settings.MinimizeToTray;
             ShowNotifications = settings.ShowNotifications;
 
-            IpcResponse response = await _ipcClient.SendAsync("get-scan-on-startup");
-
-            if (response.Success && response.Data.HasValue && (response.Data.Value.ValueKind == JsonValueKind.True || response.Data.Value.ValueKind == JsonValueKind.False))
-            {
-                ScanOnStartup = response.Data.Value.GetBoolean();
-            }
-            else
-            {
-                ScanOnStartup = false;
-            }
-
+            await LoadScanOnStartupAsync();
 
             _isLoaded = true;
+        }        
+
+        public bool ScanOnStartup
+        {
+            get => _scanOnStartup;
+            set
+            {
+                if (SetProperty(ref _scanOnStartup, value))
+                {
+                    if (_isLoaded)
+                    {
+                        _ = SetScanOnStartupAsync(value);
+                    }
+                }
+            }
         }
+
+        #region Metodos privados
 
         private async Task SaveAsync()
         {
@@ -126,26 +133,38 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             await _settingsService.SaveAsync(settings);
         }
 
-        public bool ScanOnStartup
+        private async Task SetScanOnStartupAsync(bool enabled)
         {
-            get => _scanOnStartup;
-            set
+            try
             {
-                if (SetProperty(ref _scanOnStartup, value))
-                {
-                    if (_isLoaded)
-                    {
-                        _ = SetScanOnStartupAsync(value);
-                    }
-                }
+                await _ipcClient.SendAsync($"set-scan-on-startup:{enabled.ToString().ToLowerInvariant()}");
+            }
+            catch
+            {
             }
         }
 
-        #region Metodos privados
-        private async Task SetScanOnStartupAsync(bool enabled)
+        private async Task LoadScanOnStartupAsync()
         {
-            await _ipcClient.SendAsync($"set-scan-on-startup:{enabled.ToString().ToLowerInvariant()}");
+            try
+            {
+                IpcResponse response = await _ipcClient.SendAsync("get-scan-on-startup");
+
+                if (response.Success && response.Data.HasValue && (response.Data.Value.ValueKind == JsonValueKind.True || response.Data.Value.ValueKind == JsonValueKind.False))
+                {
+                    ScanOnStartup = response.Data.Value.GetBoolean();
+                }
+                else
+                {
+                    ScanOnStartup = false;
+                }
+            }
+            catch
+            {
+                ScanOnStartup = false;
+            }
         }
+
         #endregion
     }
 }
