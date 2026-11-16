@@ -21,6 +21,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         private readonly IStartupService _startupService;
         private readonly IIpcClient _ipcClient;
         private bool _scanOnStartup;
+        private bool _isUpdatingScanOnStartup;
 
         public SettingsViewModel(ISettingsService settingsService, IStartupService startupService, IIpcClient ipcClient)
         {
@@ -96,7 +97,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             await LoadScanOnStartupAsync();
 
             _isLoaded = true;
-        }        
+        }
 
         public bool ScanOnStartup
         {
@@ -105,7 +106,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             {
                 if (SetProperty(ref _scanOnStartup, value))
                 {
-                    if (_isLoaded)
+                    if (_isLoaded && !_isUpdatingScanOnStartup)
                     {
                         _ = SetScanOnStartupAsync(value);
                     }
@@ -135,12 +136,21 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         private async Task SetScanOnStartupAsync(bool enabled)
         {
+            IpcResponse response;
+
             try
             {
-                await _ipcClient.SendAsync($"set-scan-on-startup:{enabled.ToString().ToLowerInvariant()}");
+                response = await _ipcClient.SendAsync($"set-scan-on-startup:{enabled.ToString().ToLowerInvariant()}");
             }
             catch
             {
+                await ReloadScanOnStartupAsync();
+                return;
+            }
+
+            if (!response.Success)
+            {
+                await ReloadScanOnStartupAsync();
             }
         }
 
@@ -154,14 +164,28 @@ namespace WindowsIntegrityGuard.UI.ViewModels
                 {
                     ScanOnStartup = response.Data.Value.GetBoolean();
                 }
-                else
-                {
-                    ScanOnStartup = false;
-                }
             }
             catch
             {
-                ScanOnStartup = false;
+            }
+        }
+
+        private async Task ReloadScanOnStartupAsync()
+        {
+            _isUpdatingScanOnStartup = true;
+
+            try
+            {
+                IpcResponse response = await _ipcClient.SendAsync("get-scan-on-startup");
+
+                if (response.Success && response.Data.HasValue && (response.Data.Value.ValueKind == JsonValueKind.True || response.Data.Value.ValueKind == JsonValueKind.False))
+                {
+                    ScanOnStartup = response.Data.Value.GetBoolean();
+                }
+            }
+            finally
+            {
+                _isUpdatingScanOnStartup = false;
             }
         }
 
