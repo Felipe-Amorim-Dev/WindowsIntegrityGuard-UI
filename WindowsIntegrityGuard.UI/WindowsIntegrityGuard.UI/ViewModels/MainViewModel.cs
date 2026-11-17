@@ -21,6 +21,10 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         private int? _previousIntegrityStatus;
         private bool _serviceWasAvailable;
         private bool _initialSnapshotReceived;
+        private bool _isDashboardSelected = true;
+        private bool _isHistorySelected;
+        private bool _isSettingsSelected;
+        private bool _isAboutSelected;
 
         public DashboardViewModel Dashboard { get; }
 
@@ -76,6 +80,10 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         public AboutViewModel About { get; }
         public ICommand ShowAboutCommand { get; }
+        public bool IsDashboardSelected { get => _isDashboardSelected; set => SetProperty(ref _isDashboardSelected, value); }
+        public bool IsHistorySelected { get => _isHistorySelected; set => SetProperty(ref _isHistorySelected, value); }
+        public bool IsSettingsSelected { get => _isSettingsSelected; set => SetProperty(ref _isSettingsSelected, value); }
+        public bool IsAboutSelected { get => _isAboutSelected; set => SetProperty(ref _isAboutSelected, value); }
 
         #region Metodos Privados
         private async Task MonitorDashboardAsync(CancellationToken cancellationToken)
@@ -155,6 +163,8 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             Dashboard.ProblemsRepaired = snapshot.ProblemsRepaired;
             Dashboard.LastScanDuration = snapshot.LastScanDuration?.ToString(@"hh\:mm\:ss") ?? "--";
 
+            Dashboard.ApplyVisualState(snapshot.ServiceStatus, snapshot.IntegrityStatus, true);
+
             _previousIntegrityStatus = snapshot.IntegrityStatus;
             _serviceWasAvailable = true;
             _initialSnapshotReceived = true;
@@ -175,8 +185,10 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             About.ServiceStatus = "Service indisponível";
             Dashboard.IntegrityStatus = "Indisponível";
             Dashboard.IntegrityMessage = "Não foi possível conectar ao Windows Integrity Guard Service.";
-            Dashboard.CurrentOperation = "Service indisponível";
+            Dashboard.CurrentOperation = "Aguardando conexão com o serviço";
             Dashboard.ScanProgress = null;
+
+            Dashboard.ApplyVisualState(0, 0, false);
 
             OnPropertyChanged(nameof(ServiceStatus));
         }
@@ -232,17 +244,20 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         private void ShowDashboard()
         {
+            SetSelectedMenu("Dashboard");
             CurrentViewModel = Dashboard;
         }
 
         private async Task ShowHistoryAsync()
         {
+            SetSelectedMenu("History");
             CurrentViewModel = History;
             await History.LoadAsync();
         }
 
         private async Task ShowSettingsAsync()
         {
+            SetSelectedMenu("Settings");
             CurrentViewModel = Settings;
             await Settings.LoadAsync();
         }
@@ -281,6 +296,7 @@ namespace WindowsIntegrityGuard.UI.ViewModels
 
         private void ShowAbout()
         {
+            SetSelectedMenu("About");
             About.ServiceStatus = Dashboard.ServiceStatus;
             CurrentViewModel = About;
         }
@@ -291,5 +307,13 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             _monitoringCancellationTokenSource.Cancel();
             _monitoringCancellationTokenSource.Dispose();
         }
+
+        private void SetSelectedMenu(string menu)
+        {
+            IsDashboardSelected = menu == "Dashboard";
+            IsHistorySelected = menu == "History";
+            IsSettingsSelected = menu == "Settings";
+            IsAboutSelected = menu == "About";
+        }        
     }
 }

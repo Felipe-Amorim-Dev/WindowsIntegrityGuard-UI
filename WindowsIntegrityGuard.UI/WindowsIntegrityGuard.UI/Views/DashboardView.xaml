@@ -3,361 +3,584 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="Transparent">
 
-    <StackPanel>
-
-        <!-- HEADER -->
-        <Grid Margin="0,0,0,22">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel>
-                <TextBlock Text="Painel de integridade"
-                           Style="{StaticResource PageTitleStyle}"/>
-
-                <TextBlock Text="Acompanhe o estado do Windows e execute novas verificações."
-                           Style="{StaticResource PageDescriptionStyle}"
-                           Margin="0,6,0,0"/>
-            </StackPanel>
-
-            <Button Grid.Column="1"
-                    Content="▶  Verificar agora"
-                    Command="{Binding StartScanCommand}"
-                    Style="{StaticResource PrimaryActionButtonStyle}"
-                    VerticalAlignment="Center"/>
-        </Grid>
-
-        <!-- CARDS PRINCIPAIS -->
-        <Grid Margin="0,0,0,18">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="14"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="14"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- SERVICE -->
-            <Border Grid.Column="0"
-                    Background="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBackgroundConverter}}"
-                    BorderBrush="#3E4A64"
-                    BorderThickness="1"
-                    CornerRadius="16"
-                    Padding="20">
-
-                <StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Service"
-                                   Foreground="#D4DCEC"
-                                   FontSize="14"
-                                   FontWeight="SemiBold"/>
-
-                        <Border Grid.Column="1"
-                                Width="36"
-                                Height="36"
-                                Background="#46516D"
-                                CornerRadius="10">
-                            <TextBlock Text="&#xE90F;"
-                                       FontFamily="Segoe Fluent Icons"
-                                       Foreground="#AEB8CA"
-                                       FontSize="18"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
-
-                    <TextBlock Text="{Binding ServiceStatus}"
-                                Foreground="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
-                                FontSize="22"
-                                FontWeight="SemiBold"
-                                Margin="0,20,0,6"/>
-
-                    <TextBlock Text="Windows Integrity Guard Service"
-                               Foreground="{StaticResource SecondaryTextBrush}"
-                               FontSize="13"/>
-                </StackPanel>
-            </Border>
-
-            <!-- INTEGRIDADE -->
-            <Border Grid.Column="2"
-                     Background="{Binding IntegrityStatus, Converter={StaticResource IntegrityStatusToBackgroundConverter}}"
-                     BorderBrush="#3E4A64"
-                     BorderThickness="1"
-                     CornerRadius="16"
-                     Padding="20">
-
-                <StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Integridade"
-                                   Foreground="#D4DCEC"
-                                   FontSize="14"
-                                   FontWeight="SemiBold"/>
-
-                        <Border Grid.Column="1"
-                                Width="36"
-                                Height="36"
-                                Background="#456159"
-                                CornerRadius="10">
-                            <TextBlock Text="✓"
-                                       Foreground="{StaticResource GreenAccentBrush}"
-                                       FontSize="22"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
-
-                    <TextBlock Text="{Binding IntegrityStatus}"
-                               Foreground="{Binding IntegrityStatus, Converter={StaticResource IntegrityStatusToBrushConverter}}"
-                               FontSize="22"
-                               FontWeight="SemiBold"
-                               Margin="0,20,0,6"/>
-
-                    <TextBlock Text="{Binding IntegrityMessage}"
-                               Foreground="{StaticResource SecondaryTextBrush}"
-                               FontSize="13"
-                               TextWrapping="Wrap"/>
-                </StackPanel>
-            </Border>
-
-            <!-- ÚLTIMA VERIFICAÇÃO -->
-            <Border Grid.Column="4"
-                    Background="#354956"
-                    CornerRadius="16"
-                    Padding="20">
-
-                <StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Última verificação"
-                                   Foreground="#D4DCEC"
-                                   FontSize="14"
-                                   FontWeight="SemiBold"/>
-
-                        <Border Grid.Column="1"
-                                Width="36"
-                                Height="36"
-                                Background="#42606C"
-                                CornerRadius="10">
-                            <TextBlock Text="&#xE823;"
-                                       FontFamily="Segoe Fluent Icons"
-                                       Foreground="{StaticResource CyanAccentBrush}"
-                                       FontSize="18"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
-
-                    <TextBlock Text="{Binding LastScan}"
-                               Foreground="{StaticResource CyanAccentBrush}"
-                               FontSize="22"
-                               FontWeight="SemiBold"
-                               Margin="0,20,0,6"/>
-
-                    <TextBlock Text="Última execução registrada"
-                               Foreground="{StaticResource SecondaryTextBrush}"
-                               FontSize="13"/>
-                </StackPanel>
-            </Border>
-        </Grid>
-
-        <!-- MÉTRICAS -->
-        <Grid Margin="0,0,0,18">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="14"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="14"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="14"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- ARQUIVOS -->
-            <Border Grid.Column="0"
-                    Style="{StaticResource DashboardCardStyle}">
-
-                <StackPanel>
-                    <TextBlock Text="Arquivos verificados"
-                               Style="{StaticResource DashboardDescriptionStyle}"/>
-
-                    <TextBlock Text="{Binding FilesVerified, TargetNullValue=--}"
-                               Style="{StaticResource CardValueStyle}"
-                               Margin="0,12,0,0"/>
-                </StackPanel>
-            </Border>
-
-            <!-- PROBLEMAS -->
-            <Border Grid.Column="2"
-                    Style="{StaticResource DashboardCardStyle}">
-
-                <StackPanel>
-                    <TextBlock Text="Problemas encontrados"
-                               Style="{StaticResource DashboardDescriptionStyle}"/>
-
-                    <TextBlock Text="{Binding ProblemsFound, TargetNullValue=--}"
-                               Foreground="{StaticResource RedAccentBrush}"
-                               FontSize="20"
-                               FontWeight="SemiBold"
-                               Margin="0,12,0,0"/>
-                </StackPanel>
-            </Border>
-
-            <!-- REPARADOS -->
-            <Border Grid.Column="4"
-                    Style="{StaticResource DashboardCardStyle}">
-
-                <StackPanel>
-                    <TextBlock Text="Problemas reparados"
-                               Style="{StaticResource DashboardDescriptionStyle}"/>
-
-                    <TextBlock Text="{Binding ProblemsRepaired, TargetNullValue=--}"
-                               Foreground="{StaticResource GreenAccentBrush}"
-                               FontSize="20"
-                               FontWeight="SemiBold"
-                               Margin="0,12,0,0"/>
-                </StackPanel>
-            </Border>
-
-            <!-- DURAÇÃO -->
-            <Border Grid.Column="6"
-                    Style="{StaticResource DashboardCardStyle}">
-
-                <StackPanel>
-                    <TextBlock Text="Duração"
-                               Style="{StaticResource DashboardDescriptionStyle}"/>
-
-                    <TextBlock Text="{Binding LastScanDuration}"
-                               Foreground="{StaticResource YellowAccentBrush}"
-                               FontSize="20"
-                               FontWeight="SemiBold"
-                               Margin="0,12,0,0"/>
-                </StackPanel>
-            </Border>
-        </Grid>
-
-        <!-- BLOCO INFERIOR -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Padding="0,0,8,0">
+        
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.4*"/>
-                <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
 
-            <!-- OPERAÇÃO ATUAL -->
-            <Border Grid.Column="0"
-                    Style="{StaticResource DashboardCardStyle}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="230"/>
+                <RowDefinition Height="18"/>
+                <RowDefinition Height="112"/>
+                <RowDefinition Height="18"/>
+                <RowDefinition Height="220"/>
+            </Grid.RowDefinitions>
+
+            <!-- HEADER -->
+            <Grid Grid.Row="0"
+                  Margin="0,0,150,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
                 <StackPanel>
 
-                    <TextBlock Text="Operação atual"
-                               Style="{StaticResource DashboardTitleStyle}"/>
+                    <TextBlock Text="Windows Integrity Guard"
+                               Foreground="{StaticResource SecondaryTextBrush}"
+                               FontSize="12"
+                               FontWeight="SemiBold"/>
 
-                    <TextBlock Text="{Binding CurrentOperation}"
-                               Foreground="{StaticResource CyanAccentBrush}"
-                               FontSize="18"
-                               FontWeight="SemiBold"
-                               Margin="0,14,0,10"/>
+                    <TextBlock Text="Painel de integridade"
+                               Style="{StaticResource PageTitleStyle}"
+                               Margin="0,4,0,0"/>
 
-                    <TextBlock Text="O Windows Integrity Guard continuará atualizando este estado enquanto a operação estiver em execução."
-                               Style="{StaticResource DashboardDescriptionStyle}"
-                               TextWrapping="Wrap"/>
+                    <TextBlock Text="Acompanhe o estado do Windows e execute novas verificações."
+                               Style="{StaticResource PageDescriptionStyle}"
+                               Margin="0,7,0,0"/>
 
-                    <ProgressBar Height="8"
-                                 Margin="0,22,0,0"
-                                 Minimum="0"
-                                 Maximum="100"
-                                 Value="{Binding ScanProgress}"
-                                 Background="#1E263B"
-                                 Foreground="{StaticResource GreenAccentBrush}"/>
                 </StackPanel>
-            </Border>
 
-            <!-- RESUMO -->
-            <Border Grid.Column="2"
-                    Style="{StaticResource DashboardCardStyle}">
+                <!-- STATUS -->
+                <Border Grid.Column="1"
+                        Background="#291822"
+                        BorderBrush="#59303E"
+                        BorderThickness="1"
+                        CornerRadius="18"
+                        Padding="13,8"
+                        VerticalAlignment="Top"
+                        Margin="0,3,0,0">
 
-                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
 
-                    <TextBlock Text="Resumo"
-                               Style="{StaticResource DashboardTitleStyle}"/>
+                        <Ellipse Width="8"
+                                 Height="8"
+                                 Fill="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                 VerticalAlignment="Center"
+                                 Margin="0,0,8,0"/>
 
-                    <Grid Margin="0,18,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="12"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="12"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding ServiceStatus}"
+                                   Foreground="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"/>
 
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                    </StackPanel>
+                </Border>
 
-                            <TextBlock Text="Service"
-                                       Style="{StaticResource DashboardDescriptionStyle}"/>
+            </Grid>
 
-                            <TextBlock Grid.Column="1"
-                                       Text="{Binding ServiceStatus}"
-                                       Foreground="{StaticResource GreenAccentBrush}"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"/>
+            <!-- HERO + RESUMO -->
+            <Grid Grid.Row="2">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.3*"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- HERO -->
+                <Border CornerRadius="22" BorderThickness="1" Padding="28">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Color="#3A1825" Offset="0"/>
+                            <GradientStop Color="#2B1730" Offset="0.22"/>
+                            <GradientStop Color="#1C1D3F" Offset="0.55"/>
+                            <GradientStop Color="#121E46" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="#7A2E47"/>
+                    </Border.BorderBrush>
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ICONE -->
+                        <Grid Width="118"
+      Height="118"
+      HorizontalAlignment="Left"
+      VerticalAlignment="Center">
+
+                            <Grid.Resources>
+                                <Storyboard x:Key="PulseStoryboard"
+                    RepeatBehavior="Forever"
+                    AutoReverse="True">
+
+                                    <DoubleAnimation Storyboard.TargetName="PulseRing"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.45"
+                             To="1"
+                             Duration="0:0:0.8"/>
+
+                                    <DoubleAnimation Storyboard.TargetName="PulseScale"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0.92"
+                             To="1.08"
+                             Duration="0:0:0.8"/>
+
+                                    <DoubleAnimation Storyboard.TargetName="PulseScale"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="0.92"
+                             To="1.08"
+                             Duration="0:0:0.8"/>
+
+                                </Storyboard>
+                            </Grid.Resources>
+
+                            <Grid.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                    <BeginStoryboard Storyboard="{StaticResource PulseStoryboard}"/>
+                                </EventTrigger>
+                            </Grid.Triggers>
+
+                            <!-- HALO EXTERNO -->
+                            <Ellipse x:Name="PulseRing"
+             Width="108"
+             Height="108"
+             Fill="#351B27"
+             Stroke="#FF6F7D"
+             StrokeThickness="3"
+             Opacity="0.7"
+             RenderTransformOrigin="0.5,0.5">
+
+                                <Ellipse.RenderTransform>
+                                    <ScaleTransform x:Name="PulseScale"
+                            ScaleX="1"
+                            ScaleY="1"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+
+                            <!-- ANEL INTERNO FIXO -->
+                            <Ellipse Width="92"
+             Height="92"
+             Stroke="#FF6F7D"
+             StrokeThickness="2.2"
+             Opacity="0.9"/>
+
+                            <!-- ÍCONE -->
+                            <Path Fill="#FF6F7D"
+          Stretch="Uniform"
+          Width="38"
+          Height="38"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Data="M12,2 L22,20 H2 Z"/>
+
+                            <!-- EXCLAMAÇÃO -->
+                            <StackPanel HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="0,5,0,0">
+
+                                <Rectangle Width="3"
+                   Height="12"
+                   RadiusX="1.5"
+                   RadiusY="1.5"
+                   Fill="#3A1720"/>
+
+                                <Ellipse Width="3.5"
+                 Height="3.5"
+                 Fill="#3A1720"
+                 Margin="0,3,0,0"/>
+
+                            </StackPanel>
+
                         </Grid>
 
-                        <Grid Grid.Row="2">
+                        <!-- STATUS -->
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Margin="16,0,0,0">
+
+                            <TextBlock Text="ATENÇÃO NECESSÁRIA"
+                                       Foreground="{StaticResource RedAccentBrush}"
+                                       FontSize="12"
+                                       FontWeight="Bold"/>
+
+                            <TextBlock Text="{Binding IntegrityStatus}"
+                                       Foreground="{StaticResource PrimaryTextBrush}"
+                                       FontSize="27"
+                                       FontWeight="Bold"
+                                       Margin="0,7,0,0"/>
+
+                            <TextBlock Text="{Binding IntegrityMessage}"
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="13"
+                                       TextWrapping="Wrap"
+                                       Margin="0,7,15,0"/>
+
+                            <Button Command="{Binding StartScanCommand}"
+                                    Style="{StaticResource PrimaryActionButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,20,0,0">
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <TextBlock Text="&#xE895;"
+                                               FontFamily="Segoe Fluent Icons"
+                                               FontSize="16"
+                                               Margin="0,0,9,0"/>
+
+                                    <TextBlock Text="Verificar agora"/>
+
+                                </StackPanel>
+                            </Button>
+
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+
+                <!-- RESUMO -->
+                <Border Grid.Column="2"
+                        Style="{StaticResource DashboardCardStyle}">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Resumo"
+                                   Style="{StaticResource DashboardTitleStyle}"
+                                   FontSize="18"
+                                   Margin="0,0,0,13"/>
+
+                        <Border Height="1"
+                                Background="#283657"/>
+
+                        <!-- SERVICE -->
+                        <Grid Margin="0,16,0,15">
+
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="Integridade"
-                                       Style="{StaticResource DashboardDescriptionStyle}"/>
+                            <Ellipse Width="8"
+                                     Height="8"
+                                     Fill="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                     VerticalAlignment="Center"/>
 
                             <TextBlock Grid.Column="1"
+                                       Text="Service"
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="16"                                       
+                                       Margin="10,0"/>
+
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding ServiceStatus}"
+                                       Foreground="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                       FontSize="16"                                       
+                                       FontWeight="SemiBold"/>
+
+                        </Grid>
+
+                        <Border Height="1"
+                                Background="#283657"/>
+
+                        <!-- INTEGRIDADE -->
+                        <Grid Margin="0,16,0,15">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Ellipse Width="8"
+                                     Height="8"
+                                     Fill="{Binding IntegrityStatus, Converter={StaticResource IntegrityStatusToBrushConverter}}"
+                                     VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="1"
+                                       Text="Integridade"
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="16"
+                                       Margin="10,0"/>
+
+                            <TextBlock Grid.Column="2"
                                        Text="{Binding IntegrityStatus}"
                                        Foreground="{Binding IntegrityStatus, Converter={StaticResource IntegrityStatusToBrushConverter}}"
-                                       FontSize="14"
+                                       FontSize="16"
                                        FontWeight="SemiBold"/>
+
                         </Grid>
 
-                        <Grid Grid.Row="4">
+                        <Border Height="1"
+                                Background="#283657"/>
+
+                        <!-- LAST -->
+                        <Grid Margin="0,16,0,0">
+
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="Última verificação"
-                                       Style="{StaticResource DashboardDescriptionStyle}"/>
+                            <Ellipse Width="8"
+                                     Height="8"
+                                     Fill="#586682"
+                                     VerticalAlignment="Center"/>
 
                             <TextBlock Grid.Column="1"
+                                       Text="Última verificação"
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="16"
+                                       Margin="10,0"/>
+
+                            <TextBlock Grid.Column="2"
                                        Text="{Binding LastScan}"
-                                       Foreground="{StaticResource PrimaryTextBrush}"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"/>
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="16"/>
+
                         </Grid>
 
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+            <!-- MÉTRICAS -->
+            <Grid Grid.Row="4">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="14"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="14"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="14"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- FILES -->
+                <Border Grid.Column="0"
+                        Style="{StaticResource DashboardCardStyle}"
+                        Padding="18">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="46"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Width="40"
+                                Height="40"
+                                Background="#17294F"
+                                CornerRadius="11">
+
+                            <TextBlock Text="&#xE8A5;"
+                                       FontFamily="Segoe Fluent Icons"
+                                       Foreground="{StaticResource BlueAccentBrush}"
+                                       FontSize="17"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+
+                        <StackPanel Grid.Column="1"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center">
+
+                            <TextBlock Text="Arquivos verificados"
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="16"/>
+
+                            <TextBlock Text="{Binding FilesVerified, TargetNullValue=—}"
+                                       Foreground="{StaticResource PrimaryTextBrush}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+
                     </Grid>
-                </StackPanel>
+                </Border>
+
+                <!-- FOUND -->
+                <Border Grid.Column="2"
+                        Style="{StaticResource DashboardCardStyle}"
+                        Padding="18">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="46"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Width="40"
+                                Height="40"
+                                Background="#38202B"
+                                CornerRadius="11">
+
+                            <TextBlock Text="&#xE814;"
+                                       FontFamily="Segoe Fluent Icons"
+                                       Foreground="{StaticResource RedAccentBrush}"
+                                       FontSize="17"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+
+                        <StackPanel Grid.Column="1"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center">
+
+                            <TextBlock Text="Problemas encontrados"
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="16"/>
+
+                            <TextBlock Text="{Binding ProblemsFound, TargetNullValue=—}"
+                                       Foreground="{StaticResource PrimaryTextBrush}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+
+                <!-- FIXED -->
+                <Border Grid.Column="4"
+                        Style="{StaticResource DashboardCardStyle}"
+                        Padding="18">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="46"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Width="40"
+                                Height="40"
+                                Background="#15372F"
+                                CornerRadius="11">
+
+                            <TextBlock Text="&#xE90F;"
+                                       FontFamily="Segoe Fluent Icons"
+                                       Foreground="{StaticResource GreenAccentBrush}"
+                                       FontSize="17"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+
+                        <StackPanel Grid.Column="1"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center">
+
+                            <TextBlock Text="Problemas reparados"
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="16"/>
+
+                            <TextBlock Text="{Binding ProblemsRepaired, TargetNullValue=—}"
+                                       Foreground="{StaticResource PrimaryTextBrush}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+
+                <!-- DURATION -->
+                <Border Grid.Column="6"
+                        Style="{StaticResource DashboardCardStyle}"
+                        Padding="18">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="46"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Width="40"
+                                Height="40"
+                                Background="#3A3314"
+                                CornerRadius="11">
+
+                            <TextBlock Text="&#xE916;"
+                                       FontFamily="Segoe Fluent Icons"
+                                       Foreground="{StaticResource YellowAccentBrush}"
+                                       FontSize="17"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+
+                        <StackPanel Grid.Column="1"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center">
+
+                            <TextBlock Text="Duração"
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="16"/>
+
+                            <TextBlock Text="{Binding LastScanDuration}"
+                                       Foreground="{StaticResource PrimaryTextBrush}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+
+            </Grid>
+
+            <!-- OPERAÇÃO -->
+            <Border Grid.Row="6"
+                    Style="{StaticResource DashboardCardStyle}"
+                    MinHeight="210">
+
+                <Grid VerticalAlignment="Center">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="18"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="16"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+
+                        <TextBlock Text="Operação atual"
+                                   Style="{StaticResource DashboardTitleStyle}"/>
+
+                        <TextBlock Text="{Binding CurrentOperation}"
+                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                   FontSize="12"
+                                   HorizontalAlignment="Right"/>
+
+                    </Grid>
+
+                    <ProgressBar Grid.Row="2"
+                                 Minimum="0"
+                                 Maximum="100"
+                                 Value="{Binding ScanProgress, TargetNullValue=0}"
+                                 Height="8"
+                                 Background="#1B294A"
+                                 Foreground="{StaticResource CyanAccentBrush}"
+                                 BorderThickness="0"/>
+
+                    <TextBlock Grid.Row="4"
+                               Text="O Windows Integrity Guard continuará atualizando este estado enquanto a operação estiver em execução."
+                               Foreground="{StaticResource SecondaryTextBrush}"
+                               FontSize="12"/>
+
+                </Grid>
             </Border>
 
         </Grid>
-    </StackPanel>
+
+    </ScrollViewer>
+
 </UserControl>

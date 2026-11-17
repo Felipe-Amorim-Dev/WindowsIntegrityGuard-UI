@@ -7,14 +7,15 @@
         Title="Windows Integrity Guard"
         Width="1280"
         Height="820"
-        MinWidth="1100"
-        MinHeight="720"
-        Background="{StaticResource ApplicationBackgroundBrush}"
+        MinWidth="1180"
+        MinHeight="760"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        ResizeMode="CanResize">
+        ResizeMode="CanResize"
+        Background="{StaticResource ApplicationBackgroundBrush}">
 
     <Window.Resources>
+
         <DataTemplate DataType="{x:Type viewModels:DashboardViewModel}">
             <views:DashboardView/>
         </DataTemplate>
@@ -30,243 +31,260 @@
         <DataTemplate DataType="{x:Type viewModels:AboutViewModel}">
             <views:AboutView/>
         </DataTemplate>
+
     </Window.Resources>
 
     <shell:WindowChrome.WindowChrome>
-        <shell:WindowChrome CaptionHeight="44"
-                            CornerRadius="40"
+        <shell:WindowChrome CaptionHeight="42"
+                            CornerRadius="20"
                             GlassFrameThickness="0"
                             ResizeBorderThickness="6"
                             UseAeroCaptionButtons="False"/>
     </shell:WindowChrome.WindowChrome>
 
-    <Border Background="Transparent" CornerRadius="20">
-        <Grid Margin="0">
+    <Grid Background="{StaticResource MainBackgroundBrush}">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="285"/>
-                <ColumnDefinition Width="0"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="84"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-            <!-- SIDEBAR -->
-            <Border Grid.Column="0"
-                    Background="{StaticResource SidebarBackgroundBrush}"
-                    CornerRadius="20, 0, 0, 20"
-                    Padding="20">
+        <!-- SIDEBAR -->
+        <Border Grid.Column="0"
+                Background="{StaticResource SidebarBackgroundBrush}"
+                BorderBrush="#17223D"
+                BorderThickness="0,0,1,0">
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+            <Grid>
 
-                    <!-- LOGO -->
-                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="92"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="52"/>
+                </Grid.RowDefinitions>
 
-                        <Border Width="46"
-                                Height="46"
-                                Background="#D8F6E9"
-                                CornerRadius="13">
+                <!-- LOGO -->
+                <Border Width="44"
+        Height="44"
+        CornerRadius="13"
+        Background="{StaticResource CyanAccentBrush}"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Top"
+        Margin="0,24,0,0">
 
-                            <TextBlock Text="✓"
-                                       Foreground="#1DB978"
-                                       FontSize="30"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
+                    <Viewbox Width="25"
+             Height="25"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center">
 
-                        <StackPanel Margin="12,1,0,0">
-                            <TextBlock Text="Windows Integrity"
-                                       Foreground="{StaticResource SidebarTextBrush}"
-                                       FontSize="18"
-                                       FontWeight="SemiBold"/>
+                        <Grid Width="24" Height="24">
 
-                            <TextBlock Text="Protegendo o sistema"
-                                       Foreground="{StaticResource SidebarSecondaryTextBrush}"
-                                       FontSize="12"
-                                       Margin="0,4,0,0"/>
-                        </StackPanel>
-                    </StackPanel>
+                            <!-- ESCUDO -->
+                            <Path Stroke="#071426"
+                  StrokeThickness="1.8"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round"
+                  StrokeLineJoin="Round"
+                  Fill="Transparent"
+                  Data="M12,2.7 L20,5.8 L20,11.2 C20,16.3 16.7,20.1 12,22 C7.3,20.1 4,16.3 4,11.2 L4,5.8 Z"/>
 
-                    <!-- NAVEGAÇÃO -->
-                    <StackPanel Grid.Row="2">
+                            <!-- CHECK -->
+                            <Path Stroke="#071426"
+                  StrokeThickness="2"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round"
+                  StrokeLineJoin="Round"
+                  Fill="Transparent"
+                  Data="M8.1,12.1 L10.8,14.8 L16.5,9.2"/>
 
-                        <Button Style="{StaticResource NavigationButtonStyle}"
-                                Command="{Binding ShowDashboardCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE80F;"
-                                           FontFamily="Segoe Fluent Icons"
-                                           FontSize="20"
-                                           Width="28"
-                                           VerticalAlignment="Center"/>
-
-                                <TextBlock Text="Início"
-                                           FontSize="15"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource NavigationButtonStyle}"
-                                Command="{Binding ShowHistoryCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE81C;"
-                                           FontFamily="Segoe Fluent Icons"
-                                           FontSize="20"
-                                           Width="28"
-                                           VerticalAlignment="Center"/>
-
-                                <TextBlock Text="Histórico"
-                                           FontSize="15"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource NavigationButtonStyle}"
-                                Command="{Binding ShowSettingsCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE713;"
-                                           FontFamily="Segoe Fluent Icons"
-                                           FontSize="20"
-                                           Width="28"
-                                           VerticalAlignment="Center"/>
-
-                                <TextBlock Text="Configurações"
-                                           FontSize="15"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource NavigationButtonStyle}"
-                                Command="{Binding ShowAboutCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE946;"
-                                           FontFamily="Segoe Fluent Icons"
-                                           FontSize="20"
-                                           Width="28"
-                                           VerticalAlignment="Center"/>
-
-                                <TextBlock Text="Sobre"
-                                           FontSize="15"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                    </StackPanel>
-
-                    <!-- FOOTER -->
-                    <StackPanel Grid.Row="3">
-                        <TextBlock Text="Windows Integrity Guard"
-                                   Foreground="{StaticResource SidebarTextBrush}"
-                                   FontSize="12"
-                                   FontWeight="SemiBold"/>
-
-                        <TextBlock Text="v0.5.0"
-                                   Foreground="{StaticResource SidebarSecondaryTextBrush}"
-                                   FontSize="11"
-                                   Margin="0,4,0,0"/>
-                    </StackPanel>
-
-                </Grid>
-            </Border>
-
-            <!-- PAINEL PRINCIPAL -->
-            <Border Grid.Column="2"
-                    Background="{StaticResource MainBackgroundBrush}"
-                    CornerRadius="0, 20, 20, 0">
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="72"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- TOPBAR -->
-                    <Grid Grid.Row="0"
-                          Margin="28,0,16,0">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- IDENTIFICAÇÃO -->
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Windows Integrity Guard"
-                                       Foreground="{StaticResource PrimaryTextBrush}"
-                                       FontSize="17"
-                                       FontWeight="SemiBold"/>
-
-                            <TextBlock Text="Monitoramento e integridade do Windows"
-                                       Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="12"
-                                       Margin="0,3,0,0"/>
-                        </StackPanel>
-
-                        <!-- STATUS SERVICE -->
-                        <Border Grid.Column="1"
-                                Background="#29344E"
-                                CornerRadius="16"
-                                Padding="12,7"
-                                Margin="0,0,16,0"
-                                VerticalAlignment="Center">
-
-                            <StackPanel Orientation="Horizontal">
-
-                                <Ellipse Width="9"
-                                        Height="9"
-                                        Fill="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"/>
-
-                                <TextBlock Text="{Binding ServiceStatus}"
-                                           Foreground="{StaticResource PrimaryTextBrush}"
-                                           FontSize="13"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-
-                        </Border>
-
-                        <!-- WINDOW CONTROLS -->
-                        <StackPanel Grid.Column="2"
-                                    Orientation="Horizontal"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    shell:WindowChrome.IsHitTestVisibleInChrome="True">
-
-                            <Button Content="—"
-                                    Style="{StaticResource WindowCaptionButtonStyle}"
-                                    Click="MinimizeButton_Click"/>
-
-                            <Button Content="▢"
-                                    Style="{StaticResource WindowCaptionButtonStyle}"
-                                    Click="MaximizeButton_Click"/>
-
-                            <Button Content="✕"
-                                    Style="{StaticResource WindowCloseButtonStyle}"
-                                    Click="CloseButton_Click"/>
-                        </StackPanel>
-
-                    </Grid>
-
-                    <!-- CONTEÚDO DINÂMICO -->
-                    <ScrollViewer Grid.Row="1"
-                                  VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Disabled">
-
-                        <Grid Margin="28,10,28,28">
-                            <ContentControl Content="{Binding CurrentViewModel}"/>
                         </Grid>
 
-                    </ScrollViewer>
+                    </Viewbox>
 
-                </Grid>
-            </Border>
+                </Border>
+
+                <!-- NAVEGAÇÃO -->
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            Margin="0,5,0,0">
+
+                    <Button Command="{Binding ShowDashboardCommand}">
+
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource NavigationButtonStyle}">
+                                <Style.Triggers>
+
+                                    <DataTrigger Binding="{Binding IsDashboardSelected}" Value="True">
+                                        <Setter Property="Background" Value="#193767"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <StackPanel>
+
+                            <TextBlock Text="&#xE80F;"
+                                FontFamily="Segoe Fluent Icons"
+                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                FontSize="21"
+                                HorizontalAlignment="Center"/>
+
+                            <TextBlock Text="Início"
+                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                Margin="0,5,0,0"
+                                HorizontalAlignment="Center"/>
+
+                        </StackPanel>
+
+                    </Button>
+
+                    <Button Command="{Binding ShowHistoryCommand}">
+
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource NavigationButtonStyle}">
+                                <Style.Triggers>
+
+                                    <DataTrigger Binding="{Binding IsHistorySelected}" Value="True">
+                                        <Setter Property="Background" Value="#193767"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <StackPanel>
+
+                            <TextBlock Text="&#xE81C;"
+                                FontFamily="Segoe Fluent Icons"
+                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                FontSize="21"
+                                HorizontalAlignment="Center"/>
+
+                            <TextBlock Text="Histórico"
+                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                Margin="0,5,0,0"
+                                HorizontalAlignment="Center"/>
+
+                        </StackPanel>
+
+                    </Button>
+
+                    <Button Command="{Binding ShowSettingsCommand}">
+
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource NavigationButtonStyle}">
+                                <Style.Triggers>
+
+                                    <DataTrigger Binding="{Binding IsSettingsSelected}" Value="True">
+                                        <Setter Property="Background" Value="#193767"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <StackPanel>
+
+                            <TextBlock Text="&#xE713;"
+                                FontFamily="Segoe Fluent Icons"
+                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                FontSize="21"
+                                HorizontalAlignment="Center"/>
+
+                            <TextBlock Text="Ajustes"
+                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                Margin="0,5,0,0"
+                                HorizontalAlignment="Center"/>
+
+                        </StackPanel>
+
+                    </Button>
+
+                    <Button Command="{Binding ShowAboutCommand}">
+
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource NavigationButtonStyle}">
+                                <Style.Triggers>
+
+                                    <DataTrigger Binding="{Binding IsAboutSelected}" Value="True">
+                                        <Setter Property="Background" Value="#193767"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <StackPanel>
+
+                            <TextBlock Text="&#xE946;"
+                                FontFamily="Segoe Fluent Icons"
+                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                FontSize="21"
+                                HorizontalAlignment="Center"/>
+
+                            <TextBlock Text="Sobre"
+                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                Margin="0,5,0,0"
+                                HorizontalAlignment="Center"/>
+
+                        </StackPanel>
+
+                    </Button>
+
+                </StackPanel>
+
+                <TextBlock Grid.Row="2"
+                           Text="v0.6.0"
+                           Foreground="{StaticResource MutedTextBrush}"
+                           FontSize="10"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+
+            </Grid>
+        </Border>
+
+        <!-- CONTEÚDO -->
+        <Grid Grid.Column="1">
+
+            <ContentControl Content="{Binding CurrentViewModel}"
+                            Margin="36,60,36,28"/>
+
+            <!-- CONTROLES -->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,5,8,0"
+                        Panel.ZIndex="10"
+                        shell:WindowChrome.IsHitTestVisibleInChrome="True">
+
+                <Button Content="—"
+                        Style="{StaticResource WindowCaptionButtonStyle}"
+                        Click="MinimizeButton_Click"/>
+
+                <Button Content="□"
+                        Style="{StaticResource WindowCaptionButtonStyle}"
+                        Click="MaximizeButton_Click"/>
+
+                <Button Content="×"
+                        Style="{StaticResource WindowCloseButtonStyle}"
+                        Click="CloseButton_Click"/>
+
+            </StackPanel>
 
         </Grid>
-    </Border>
+
+    </Grid>
 </Window>

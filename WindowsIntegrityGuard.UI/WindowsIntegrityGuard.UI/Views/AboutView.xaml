@@ -6,37 +6,66 @@
     <StackPanel>
 
         <!-- HEADER -->
-        <StackPanel Margin="0,0,0,24">
+        <StackPanel Margin="0,0,0,22">
+
             <TextBlock Text="Sobre"
                        Style="{StaticResource PageTitleStyle}"/>
 
             <TextBlock Text="Informações sobre o Windows Integrity Guard."
                        Style="{StaticResource PageDescriptionStyle}"
-                       Margin="0,6,0,0"/>
+                       Margin="0,7,0,0"/>
+
         </StackPanel>
 
-        <!-- IDENTIDADE -->
+        <!-- PRODUTO -->
         <Border Style="{StaticResource DashboardCardStyle}"
                 Margin="0,0,0,16">
 
             <Grid>
+
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="88"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Width="72"
-                        Height="72"
-                        Background="#D8F6E9"
-                        CornerRadius="20"
-                        VerticalAlignment="Top">
+                <Border Width="64"
+                        Height="64"
+                        CornerRadius="13"
+                        Background="{StaticResource CyanAccentBrush}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Margin="0,0,0,0">
 
-                    <TextBlock Text="✓"
-                               Foreground="#1DB978"
-                               FontSize="44"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
+                    <Viewbox Width="45"
+                             Height="45"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center">
+
+                        <Grid Width="24" Height="24">
+
+                            <!-- ESCUDO -->
+                            <Path Stroke="#071426"
+                                StrokeThickness="1.8"
+                                StrokeStartLineCap="Round"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                Fill="Transparent"
+                                Data="M12,2.7 L20,5.8 L20,11.2 C20,16.3 16.7,20.1 12,22 C7.3,20.1 4,16.3 4,11.2 L4,5.8 Z"/>
+
+                            <!-- CHECK -->
+                            <Path Stroke="#071426"
+                                StrokeThickness="2"
+                                StrokeStartLineCap="Round"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                Fill="Transparent"
+                                Data="M8.1,12.1 L10.8,14.8 L16.5,9.2"/>
+
+                        </Grid>
+
+                    </Viewbox>
+
                 </Border>
 
                 <StackPanel Grid.Column="1"
@@ -44,33 +73,37 @@
 
                     <TextBlock Text="{Binding ApplicationName}"
                                Foreground="{StaticResource PrimaryTextBrush}"
-                               FontSize="26"
-                               FontWeight="SemiBold"/>
+                               FontSize="25"
+                               FontWeight="Bold"/>
 
                     <TextBlock Text="{Binding Description}"
                                Foreground="{StaticResource SecondaryTextBrush}"
-                               FontSize="14"
+                               FontSize="13"
                                TextWrapping="Wrap"
-                               Margin="0,8,0,0"/>
-
-                    <Border Background="#34405D"
-                            CornerRadius="8"
-                            Padding="10,5"
-                            HorizontalAlignment="Left"
-                            Margin="0,14,0,0">
-
-                        <TextBlock Text="{Binding Version, StringFormat=Versão {0}}"
-                                   Foreground="{StaticResource CyanAccentBrush}"
-                                   FontSize="12"
-                                   FontWeight="SemiBold"/>
-                    </Border>
+                               Margin="0,7,30,0"/>
 
                 </StackPanel>
+
+                <Border Grid.Column="2"
+                        Background="#17294F"
+                        CornerRadius="10"
+                        Padding="12,7"
+                        VerticalAlignment="Center">
+
+                    <TextBlock Text="{Binding Version, StringFormat=Versão {0}}"
+                               Foreground="{StaticResource BlueAccentBrush}"
+                               FontSize="12"
+                               FontWeight="SemiBold"/>
+
+                </Border>
+
             </Grid>
+
         </Border>
 
-        <!-- INFORMAÇÕES -->
+        <!-- INFO -->
         <Grid Margin="0,0,0,16">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="16"/>
@@ -78,105 +111,67 @@
             </Grid.ColumnDefinitions>
 
             <!-- SERVICE -->
-            <Border Grid.Column="0"
-                    Style="{StaticResource DashboardCardStyle}">
+            <Border Style="{StaticResource DashboardCardStyle}">
 
                 <StackPanel>
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Service"
-                                   Style="{StaticResource DashboardTitleStyle}"/>
-
-                        <Border Grid.Column="1"
-                                Width="40"
-                                Height="40"
-                                Background="#33425C"
-                                CornerRadius="11">
-
-                            <TextBlock Text="&#xE90F;"
-                                       FontFamily="Segoe Fluent Icons"
-                                       Foreground="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
-                                       FontSize="20"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
+                    <TextBlock Text="Service"
+                               Style="{StaticResource DashboardTitleStyle}"/>
 
                     <TextBlock Text="{Binding ServiceName}"
                                Foreground="{StaticResource SecondaryTextBrush}"
-                               FontSize="13"
-                               Margin="0,18,0,5"/>
+                               FontSize="12"
+                               Margin="0,18,0,8"/>
 
                     <StackPanel Orientation="Horizontal">
 
                         <Ellipse Width="9"
                                  Height="9"
                                  Fill="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
-                                 VerticalAlignment="Center"
-                                 Margin="0,0,8,0"/>
+                                 Margin="0,0,8,0"
+                                 VerticalAlignment="Center"/>
 
                         <TextBlock Text="{Binding ServiceStatus}"
                                    Foreground="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
-                                   FontSize="16"
+                                   FontSize="17"
                                    FontWeight="SemiBold"/>
+
                     </StackPanel>
 
                 </StackPanel>
+
             </Border>
 
-            <!-- LICENÇA -->
+            <!-- LICENSE -->
             <Border Grid.Column="2"
                     Style="{StaticResource DashboardCardStyle}">
 
                 <StackPanel>
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Licença"
-                                   Style="{StaticResource DashboardTitleStyle}"/>
-
-                        <Border Grid.Column="1"
-                                Width="40"
-                                Height="40"
-                                Background="#3F3D57"
-                                CornerRadius="11">
-
-                            <TextBlock Text="&#xE8A5;"
-                                       FontFamily="Segoe Fluent Icons"
-                                       Foreground="{StaticResource BlueAccentBrush}"
-                                       FontSize="20"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
+                    <TextBlock Text="Licença"
+                               Style="{StaticResource DashboardTitleStyle}"/>
 
                     <TextBlock Text="{Binding License}"
                                Foreground="{StaticResource BlueAccentBrush}"
                                FontSize="22"
                                FontWeight="SemiBold"
-                               Margin="0,18,0,5"/>
+                               Margin="0,18,0,6"/>
 
                     <TextBlock Text="Projeto distribuído sob licença MIT."
                                Foreground="{StaticResource SecondaryTextBrush}"
-                               FontSize="13"/>
+                               FontSize="12"/>
 
                 </StackPanel>
+
             </Border>
+
         </Grid>
 
-        <!-- PROJETO -->
+        <!-- GITHUB -->
         <Border Style="{StaticResource DashboardCardStyle}">
 
             <Grid>
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -189,14 +184,13 @@
 
                     <TextBlock Text="Acesse o código-fonte, documentação e histórico de desenvolvimento no GitHub."
                                Style="{StaticResource DashboardDescriptionStyle}"
-                               Margin="0,6,20,0"
-                               TextWrapping="Wrap"/>
+                               Margin="0,6,30,0"/>
 
                     <TextBlock Text="{Binding RepositoryUrl}"
                                Foreground="{StaticResource MutedTextBrush}"
-                               FontSize="12"
-                               Margin="0,12,20,0"
-                               TextWrapping="Wrap"/>
+                               FontSize="11"
+                               Margin="0,12,0,0"/>
+
                 </StackPanel>
 
                 <Button Grid.Column="1"
@@ -208,17 +202,19 @@
 
                         <TextBlock Text="&#xE8A5;"
                                    FontFamily="Segoe Fluent Icons"
-                                   FontSize="17"
-                                   Margin="0,0,10,0"
-                                   VerticalAlignment="Center"/>
+                                   FontSize="16"
+                                   Margin="0,0,9,0"/>
 
-                        <TextBlock Text="Abrir no GitHub"
-                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="Abrir no GitHub"/>
+
                     </StackPanel>
+
                 </Button>
 
             </Grid>
+
         </Border>
 
     </StackPanel>
+
 </UserControl>
