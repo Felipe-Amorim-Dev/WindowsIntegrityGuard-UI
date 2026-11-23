@@ -1,12 +1,13 @@
 ﻿<UserControl x:Class="WindowsIntegrityGuard.UI.Views.DashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:WindowsIntegrityGuard.UI.Controls"
              Background="Transparent">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled"
                   Padding="0,0,8,0">
-        
+
         <Grid>
 
             <Grid.RowDefinitions>
@@ -19,9 +20,11 @@
                 <RowDefinition Height="220"/>
             </Grid.RowDefinitions>
 
+            <!-- ====================================================== -->
             <!-- HEADER -->
-            <Grid Grid.Row="0"
-                  Margin="0,0,150,0">
+            <!-- ====================================================== -->
+
+            <Grid Grid.Row="0" Margin="0,0,150,0">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -45,10 +48,11 @@
 
                 </StackPanel>
 
-                <!-- STATUS -->
+                <!-- STATUS DO SERVICE -->
+
                 <Border Grid.Column="1"
-                        Background="#291822"
-                        BorderBrush="#59303E"
+                        Background="{Binding ServiceBadgeBackground}"
+                        BorderBrush="{Binding ServiceBadgeBorder}"
                         BorderThickness="1"
                         CornerRadius="18"
                         Padding="13,8"
@@ -59,21 +63,25 @@
 
                         <Ellipse Width="8"
                                  Height="8"
-                                 Fill="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                 Fill="{Binding ServiceBadgeForeground}"
                                  VerticalAlignment="Center"
                                  Margin="0,0,8,0"/>
 
                         <TextBlock Text="{Binding ServiceStatus}"
-                                   Foreground="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                   Foreground="{Binding ServiceBadgeForeground}"
                                    FontSize="12"
                                    FontWeight="SemiBold"/>
 
                     </StackPanel>
+
                 </Border>
 
             </Grid>
 
+            <!-- ====================================================== -->
             <!-- HERO + RESUMO -->
+            <!-- ====================================================== -->
+
             <Grid Grid.Row="2">
 
                 <Grid.ColumnDefinitions>
@@ -82,20 +90,40 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
+                <!-- ================================================== -->
                 <!-- HERO -->
-                <Border CornerRadius="22" BorderThickness="1" Padding="28">
-                    <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#3A1825" Offset="0"/>
-                            <GradientStop Color="#2B1730" Offset="0.22"/>
-                            <GradientStop Color="#1C1D3F" Offset="0.55"/>
-                            <GradientStop Color="#121E46" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Border.Background>
+                <!-- ================================================== -->
 
-                    <Border.BorderBrush>
-                        <SolidColorBrush Color="#7A2E47"/>
-                    </Border.BorderBrush>
+                <Border Grid.Column="0"
+                        BorderBrush="#6E304A"
+                        BorderThickness="1"
+                        CornerRadius="20"
+                        Padding="30">
+
+                    <!-- GRADIENTE -->
+                    <Border.Background>
+
+                        <LinearGradientBrush StartPoint="0,0.5"
+                                             EndPoint="1,0.5">
+
+                            <GradientStop Color="#341724"
+                                          Offset="0"/>
+
+                            <GradientStop Color="#2B1830"
+                                          Offset="0.20"/>
+
+                            <GradientStop Color="#1F1E3C"
+                                          Offset="0.50"/>
+
+                            <GradientStop Color="#162345"
+                                          Offset="0.78"/>
+
+                            <GradientStop Color="#12264B"
+                                          Offset="1"/>
+
+                        </LinearGradientBrush>
+
+                    </Border.Background>
 
                     <Grid>
 
@@ -104,157 +132,305 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- ICONE -->
+                        <!-- ========================================== -->
+                        <!-- INDICADOR -->
+                        <!-- ========================================== -->
+
                         <Grid Width="118"
-      Height="118"
-      HorizontalAlignment="Left"
-      VerticalAlignment="Center">
+                              Height="118"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center">
 
-                            <Grid.Resources>
-                                <Storyboard x:Key="PulseStoryboard"
-                    RepeatBehavior="Forever"
-                    AutoReverse="True">
+                            <!-- ====================================== -->
+                            <!-- ALERTA VERMELHO -->
+                            <!-- ====================================== -->
 
-                                    <DoubleAnimation Storyboard.TargetName="PulseRing"
-                             Storyboard.TargetProperty="Opacity"
-                             From="0.45"
-                             To="1"
-                             Duration="0:0:0.8"/>
+                            <Grid x:Name="AlertIndicator">
 
-                                    <DoubleAnimation Storyboard.TargetName="PulseScale"
-                             Storyboard.TargetProperty="ScaleX"
-                             From="0.92"
-                             To="1.08"
-                             Duration="0:0:0.8"/>
+                                <Grid.Style>
 
-                                    <DoubleAnimation Storyboard.TargetName="PulseScale"
-                             Storyboard.TargetProperty="ScaleY"
-                             From="0.92"
-                             To="1.08"
-                             Duration="0:0:0.8"/>
+                                    <Style TargetType="Grid">
 
-                                </Storyboard>
-                            </Grid.Resources>
+                                        <Setter Property="Visibility"
+                                                Value="Visible"/>
 
-                            <Grid.Triggers>
-                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                    <BeginStoryboard Storyboard="{StaticResource PulseStoryboard}"/>
-                                </EventTrigger>
-                            </Grid.Triggers>
+                                        <Style.Triggers>
 
-                            <!-- HALO EXTERNO -->
-                            <Ellipse x:Name="PulseRing"
-             Width="108"
-             Height="108"
-             Fill="#351B27"
-             Stroke="#FF6F7D"
-             StrokeThickness="3"
-             Opacity="0.7"
-             RenderTransformOrigin="0.5,0.5">
+                                            <!-- DURANTE SCAN ESCONDE ALERTA -->
+                                            <DataTrigger Binding="{Binding IsScanning}"
+                                                         Value="True">
 
-                                <Ellipse.RenderTransform>
-                                    <ScaleTransform x:Name="PulseScale"
-                            ScaleX="1"
-                            ScaleY="1"/>
-                                </Ellipse.RenderTransform>
-                            </Ellipse>
+                                                <Setter Property="Visibility"
+                                                        Value="Collapsed"/>
 
-                            <!-- ANEL INTERNO FIXO -->
-                            <Ellipse Width="92"
-             Height="92"
-             Stroke="#FF6F7D"
-             StrokeThickness="2.2"
-             Opacity="0.9"/>
+                                            </DataTrigger>
 
-                            <!-- ÍCONE -->
-                            <Path Fill="#FF6F7D"
-          Stretch="Uniform"
-          Width="38"
-          Height="38"
-          HorizontalAlignment="Center"
-          VerticalAlignment="Center"
-          Data="M12,2 L22,20 H2 Z"/>
+                                        </Style.Triggers>
 
-                            <!-- EXCLAMAÇÃO -->
-                            <StackPanel HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Margin="0,5,0,0">
+                                    </Style>
 
-                                <Rectangle Width="3"
-                   Height="12"
-                   RadiusX="1.5"
-                   RadiusY="1.5"
-                   Fill="#3A1720"/>
+                                </Grid.Style>
 
-                                <Ellipse Width="3.5"
-                 Height="3.5"
-                 Fill="#3A1720"
-                 Margin="0,3,0,0"/>
+                                <!-- HALO -->
+                                <Ellipse Width="116"
+                                         Height="116"
+                                         Fill="#401C2A"
+                                         Opacity="0.55"/>
 
-                            </StackPanel>
+                                <!-- ANEL PULSANTE -->
+
+                                <Ellipse x:Name="PulseRing"
+                                         Width="100"
+                                         Height="100"
+                                         Fill="#351B27"
+                                         Stroke="{StaticResource RedAccentBrush}"
+                                         StrokeThickness="3"
+                                         RenderTransformOrigin="0.5,0.5">
+
+                                    <Ellipse.RenderTransform>
+
+                                        <ScaleTransform x:Name="PulseScale"
+                                                        ScaleX="1"
+                                                        ScaleY="1"/>
+
+                                    </Ellipse.RenderTransform>
+
+                                    <Ellipse.Triggers>
+
+                                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+
+                                            <BeginStoryboard>
+
+                                                <Storyboard RepeatBehavior="Forever"
+                                                            AutoReverse="True">
+
+                                                    <DoubleAnimation Storyboard.TargetName="PulseRing"
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     From="0.55"
+                                                                     To="1"
+                                                                     Duration="0:0:1"/>
+
+                                                    <DoubleAnimation Storyboard.TargetName="PulseScale"
+                                                                     Storyboard.TargetProperty="ScaleX"
+                                                                     From="0.94"
+                                                                     To="1.06"
+                                                                     Duration="0:0:1"/>
+
+                                                    <DoubleAnimation Storyboard.TargetName="PulseScale"
+                                                                     Storyboard.TargetProperty="ScaleY"
+                                                                     From="0.94"
+                                                                     To="1.06"
+                                                                     Duration="0:0:1"/>
+
+                                                </Storyboard>
+
+                                            </BeginStoryboard>
+
+                                        </EventTrigger>
+
+                                    </Ellipse.Triggers>
+
+                                </Ellipse>
+
+                                <!-- ANEL INTERNO -->
+
+                                <Ellipse Width="82"
+                                         Height="82"
+                                         Stroke="{StaticResource RedAccentBrush}"
+                                         StrokeThickness="2"
+                                         Opacity="0.85"/>
+
+                                <!-- TRIÂNGULO -->
+
+                                <Path Width="42"
+                                      Height="38"
+                                      Fill="{StaticResource RedAccentBrush}"
+                                      Stretch="Uniform"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Data="M12,2 L22,20 H2 Z"/>
+
+                                <!-- EXCLAMAÇÃO -->
+
+                                <StackPanel HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Margin="0,5,0,0">
+
+                                    <Rectangle Width="3"
+                                               Height="12"
+                                               RadiusX="1.5"
+                                               RadiusY="1.5"
+                                               Fill="#351B27"/>
+
+                                    <Ellipse Width="3.5"
+                                             Height="3.5"
+                                             Fill="#351B27"
+                                             Margin="0,3,0,0"/>
+
+                                </StackPanel>
+
+                            </Grid>
+
+                            <!-- ====================================== -->
+                            <!-- PROGRESSO CIRCULAR -->
+                            <!-- ====================================== -->
+
+                            <controls:CircularProgressBar Progress="{Binding ScanProgress, TargetNullValue=0}"
+                                                          Width="118"
+                                                          Height="118">
+
+                                <controls:CircularProgressBar.Style>
+
+                                    <Style TargetType="controls:CircularProgressBar">
+
+                                        <Setter Property="Visibility"
+                                                Value="Collapsed"/>
+
+                                        <Style.Triggers>
+
+                                            <DataTrigger Binding="{Binding IsScanning}"
+                                                         Value="True">
+
+                                                <Setter Property="Visibility"
+                                                        Value="Visible"/>
+
+                                            </DataTrigger>
+
+                                        </Style.Triggers>
+
+                                    </Style>
+
+                                </controls:CircularProgressBar.Style>
+
+                            </controls:CircularProgressBar>
 
                         </Grid>
 
-                        <!-- STATUS -->
+                        <!-- ========================================== -->
+                        <!-- TEXTO HERO -->
+                        <!-- ========================================== -->
+
                         <StackPanel Grid.Column="1"
                                     VerticalAlignment="Center"
                                     Margin="16,0,0,0">
 
-                            <TextBlock Text="ATENÇÃO NECESSÁRIA"
-                                       Foreground="{StaticResource RedAccentBrush}"
+                            <TextBlock Text="{Binding HeroLabel}"
+                                       Foreground="{Binding HeroAccent}"
                                        FontSize="12"
                                        FontWeight="Bold"/>
 
-                            <TextBlock Text="{Binding IntegrityStatus}"
+                            <TextBlock Text="{Binding HeroTitle}"
                                        Foreground="{StaticResource PrimaryTextBrush}"
                                        FontSize="27"
                                        FontWeight="Bold"
                                        Margin="0,7,0,0"/>
 
-                            <TextBlock Text="{Binding IntegrityMessage}"
+                            <TextBlock Text="{Binding HeroSubtitle}"
                                        Foreground="{StaticResource SecondaryTextBrush}"
                                        FontSize="13"
                                        TextWrapping="Wrap"
                                        Margin="0,7,15,0"/>
 
-                            <Button Command="{Binding StartScanCommand}"
-                                    Style="{StaticResource PrimaryActionButtonStyle}"
-                                    HorizontalAlignment="Left"
-                                    Margin="0,20,0,0">
+                            <!-- BOTÕES -->
 
-                                <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,20,0,0">
 
-                                    <TextBlock Text="&#xE895;"
-                                               FontFamily="Segoe Fluent Icons"
-                                               FontSize="16"
-                                               Margin="0,0,9,0"/>
+                                <!-- VERIFICAR -->
 
-                                    <TextBlock Text="Verificar agora"/>
+                                <Button Command="{Binding ReconnectCommand}"
+                                        Height="48"
+                                        MinWidth="190"
+                                        Padding="18,0"
+                                        Background="#35D5C4"
+                                        Foreground="#061E1B"
+                                        BorderThickness="0"
+                                        FontSize="14"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"
+                                        HorizontalAlignment="Left">
 
-                                </StackPanel>
-                            </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+
+                                            <Border x:Name="Root"
+                                                    Background="{TemplateBinding Background}"
+                                                    CornerRadius="12">
+
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center">
+
+                                                    <TextBlock Text="&#xE72C;"
+                                                               FontFamily="Segoe Fluent Icons"
+                                                               FontSize="17"
+                                                               Margin="0,0,10,0"
+                                                               VerticalAlignment="Center"/>
+
+                                                    <TextBlock Text="{Binding ReconnectText}"
+                                                               VerticalAlignment="Center"/>
+
+                                                </StackPanel>
+
+                                            </Border>
+
+                                            <ControlTemplate.Triggers>
+
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Root"
+                                                            Property="Background"
+                                                            Value="#45E0D0"/>
+                                                </Trigger>
+
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter TargetName="Root"
+                                                            Property="Background"
+                                                            Value="#27BFAF"/>
+                                                </Trigger>
+
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter TargetName="Root"
+                                                            Property="Opacity"
+                                                            Value="0.55"/>
+                                                </Trigger>
+
+                                            </ControlTemplate.Triggers>
+
+                                        </ControlTemplate>
+                                    </Button.Template>
+
+                                </Button>
+
+
+                            </StackPanel>
 
                         </StackPanel>
 
                     </Grid>
+
                 </Border>
 
+                <!-- ================================================== -->
                 <!-- RESUMO -->
+                <!-- ================================================== -->
+
                 <Border Grid.Column="2"
                         Style="{StaticResource DashboardCardStyle}">
 
                     <StackPanel>
 
                         <TextBlock Text="Resumo"
-                                   Style="{StaticResource DashboardTitleStyle}"
-                                   FontSize="18"
-                                   Margin="0,0,0,13"/>
+                                   Foreground="{StaticResource PrimaryTextBrush}"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,14"/>
 
                         <Border Height="1"
                                 Background="#283657"/>
 
                         <!-- SERVICE -->
-                        <Grid Margin="0,16,0,15">
+
+                        <Grid Margin="0,18,0,17">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -264,20 +440,21 @@
 
                             <Ellipse Width="8"
                                      Height="8"
-                                     Fill="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
+                                     Fill="{Binding ServiceBadgeForeground}"
                                      VerticalAlignment="Center"/>
 
                             <TextBlock Grid.Column="1"
                                        Text="Service"
                                        Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="16"                                       
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
                                        Margin="10,0"/>
 
                             <TextBlock Grid.Column="2"
                                        Text="{Binding ServiceStatus}"
-                                       Foreground="{Binding ServiceStatus, Converter={StaticResource ServiceStatusToBrushConverter}}"
-                                       FontSize="16"                                       
-                                       FontWeight="SemiBold"/>
+                                       Foreground="{Binding ServiceBadgeForeground}"
+                                       FontSize="14"
+                                       FontWeight="Bold"/>
 
                         </Grid>
 
@@ -285,7 +462,8 @@
                                 Background="#283657"/>
 
                         <!-- INTEGRIDADE -->
-                        <Grid Margin="0,16,0,15">
+
+                        <Grid Margin="0,18,0,17">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -295,28 +473,30 @@
 
                             <Ellipse Width="8"
                                      Height="8"
-                                     Fill="{Binding IntegrityStatus, Converter={StaticResource IntegrityStatusToBrushConverter}}"
+                                     Fill="{Binding HeroAccent}"
                                      VerticalAlignment="Center"/>
 
                             <TextBlock Grid.Column="1"
                                        Text="Integridade"
                                        Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="16"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
                                        Margin="10,0"/>
 
                             <TextBlock Grid.Column="2"
                                        Text="{Binding IntegrityStatus}"
-                                       Foreground="{Binding IntegrityStatus, Converter={StaticResource IntegrityStatusToBrushConverter}}"
-                                       FontSize="16"
-                                       FontWeight="SemiBold"/>
+                                       Foreground="{Binding HeroAccent}"
+                                       FontSize="14"
+                                       FontWeight="Bold"/>
 
                         </Grid>
 
                         <Border Height="1"
                                 Background="#283657"/>
 
-                        <!-- LAST -->
-                        <Grid Margin="0,16,0,0">
+                        <!-- ÚLTIMA VERIFICAÇÃO -->
+
+                        <Grid Margin="0,18,0,0">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -332,13 +512,15 @@
                             <TextBlock Grid.Column="1"
                                        Text="Última verificação"
                                        Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="16"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
                                        Margin="10,0"/>
 
                             <TextBlock Grid.Column="2"
                                        Text="{Binding LastScan}"
                                        Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="16"/>
+                                       FontSize="14"
+                                       FontWeight="SemiBold"/>
 
                         </Grid>
 
@@ -348,7 +530,10 @@
 
             </Grid>
 
+            <!-- ====================================================== -->
             <!-- MÉTRICAS -->
+            <!-- ====================================================== -->
+
             <Grid Grid.Row="4">
 
                 <Grid.ColumnDefinitions>
@@ -361,7 +546,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- FILES -->
+                <!-- ARQUIVOS -->
+
                 <Border Grid.Column="0"
                         Style="{StaticResource DashboardCardStyle}"
                         Padding="18">
@@ -384,6 +570,7 @@
                                        FontSize="17"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"/>
+
                         </Border>
 
                         <StackPanel Grid.Column="1"
@@ -392,19 +579,22 @@
 
                             <TextBlock Text="Arquivos verificados"
                                        Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="16"/>
+                                       FontSize="13"/>
 
                             <TextBlock Text="{Binding FilesVerified, TargetNullValue=—}"
                                        Foreground="{StaticResource PrimaryTextBrush}"
                                        FontSize="22"
                                        FontWeight="Bold"
                                        Margin="0,4,0,0"/>
+
                         </StackPanel>
 
                     </Grid>
+
                 </Border>
 
-                <!-- FOUND -->
+                <!-- PROBLEMAS ENCONTRADOS -->
+
                 <Border Grid.Column="2"
                         Style="{StaticResource DashboardCardStyle}"
                         Padding="18">
@@ -427,6 +617,7 @@
                                        FontSize="17"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"/>
+
                         </Border>
 
                         <StackPanel Grid.Column="1"
@@ -435,19 +626,22 @@
 
                             <TextBlock Text="Problemas encontrados"
                                        Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="16"/>
+                                       FontSize="13"/>
 
                             <TextBlock Text="{Binding ProblemsFound, TargetNullValue=—}"
                                        Foreground="{StaticResource PrimaryTextBrush}"
                                        FontSize="22"
                                        FontWeight="Bold"
                                        Margin="0,4,0,0"/>
+
                         </StackPanel>
 
                     </Grid>
+
                 </Border>
 
-                <!-- FIXED -->
+                <!-- PROBLEMAS REPARADOS -->
+
                 <Border Grid.Column="4"
                         Style="{StaticResource DashboardCardStyle}"
                         Padding="18">
@@ -470,6 +664,7 @@
                                        FontSize="17"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"/>
+
                         </Border>
 
                         <StackPanel Grid.Column="1"
@@ -478,19 +673,22 @@
 
                             <TextBlock Text="Problemas reparados"
                                        Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="16"/>
+                                       FontSize="13"/>
 
                             <TextBlock Text="{Binding ProblemsRepaired, TargetNullValue=—}"
                                        Foreground="{StaticResource PrimaryTextBrush}"
                                        FontSize="22"
                                        FontWeight="Bold"
                                        Margin="0,4,0,0"/>
+
                         </StackPanel>
 
                     </Grid>
+
                 </Border>
 
-                <!-- DURATION -->
+                <!-- DURAÇÃO -->
+
                 <Border Grid.Column="6"
                         Style="{StaticResource DashboardCardStyle}"
                         Padding="18">
@@ -513,6 +711,7 @@
                                        FontSize="17"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"/>
+
                         </Border>
 
                         <StackPanel Grid.Column="1"
@@ -521,21 +720,26 @@
 
                             <TextBlock Text="Duração"
                                        Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="16"/>
+                                       FontSize="13"/>
 
                             <TextBlock Text="{Binding LastScanDuration}"
                                        Foreground="{StaticResource PrimaryTextBrush}"
                                        FontSize="22"
                                        FontWeight="Bold"
                                        Margin="0,4,0,0"/>
+
                         </StackPanel>
 
                     </Grid>
+
                 </Border>
 
             </Grid>
 
-            <!-- OPERAÇÃO -->
+            <!-- ====================================================== -->
+            <!-- OPERAÇÃO ATUAL -->
+            <!-- ====================================================== -->
+
             <Border Grid.Row="6"
                     Style="{StaticResource DashboardCardStyle}"
                     MinHeight="210">
@@ -558,9 +762,12 @@
                         <TextBlock Text="{Binding CurrentOperation}"
                                    Foreground="{StaticResource SecondaryTextBrush}"
                                    FontSize="12"
+                                   FontWeight="SemiBold"
                                    HorizontalAlignment="Right"/>
 
                     </Grid>
+
+                    <!-- BARRA HORIZONTAL SECUNDÁRIA -->
 
                     <ProgressBar Grid.Row="2"
                                  Minimum="0"
@@ -577,6 +784,7 @@
                                FontSize="12"/>
 
                 </Grid>
+
             </Border>
 
         </Grid>
