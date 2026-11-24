@@ -127,44 +127,48 @@
 
                     <Grid>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="140"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        <!-- ====================================================== -->
+                        <!-- ESTADO NORMAL -->
+                        <!-- ====================================================== -->
 
-                        <!-- ========================================== -->
-                        <!-- INDICADOR -->
-                        <!-- ========================================== -->
+                        <Grid>
 
-                        <Grid Width="118"
-                              Height="118"
-                              HorizontalAlignment="Left"
-                              VerticalAlignment="Center">
+                            <Grid.Style>
 
-                            <!-- ALERTA VERMELHO -->
+                                <Style TargetType="Grid">
 
-                            <Grid x:Name="AlertIndicator">
+                                    <Setter Property="Visibility"
+                                            Value="Visible"/>
 
-                                <Grid.Style>
-                                    <Style TargetType="Grid">
+                                    <Style.Triggers>
 
-                                        <Setter Property="Visibility"
-                                                Value="Visible"/>
+                                        <DataTrigger Binding="{Binding IsScanning}"
+                                                     Value="True">
 
-                                        <Style.Triggers>
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed"/>
 
-                                            <DataTrigger Binding="{Binding IsScanning}"
-                                                         Value="True">
+                                        </DataTrigger>
 
-                                                <Setter Property="Visibility"
-                                                        Value="Collapsed"/>
+                                    </Style.Triggers>
 
-                                            </DataTrigger>
+                                </Style>
 
-                                        </Style.Triggers>
+                            </Grid.Style>
 
-                                    </Style>
-                                </Grid.Style>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- ========================================== -->
+                            <!-- ALERTA -->
+                            <!-- ========================================== -->
+
+                            <Grid Width="118"
+                                  Height="118"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center">
 
                                 <!-- HALO -->
 
@@ -267,236 +271,290 @@
 
                             </Grid>
 
-                            <!-- PROGRESSO CIRCULAR -->
+                            <!-- ========================================== -->
+                            <!-- TEXTO NORMAL -->
+                            <!-- ========================================== -->
 
-                            <controls:CircularProgressBar Progress="{Binding ScanProgress, TargetNullValue=0}"
-                                                          Width="118"
-                                                          Height="118">
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="16,0,0,0">
 
-                                <controls:CircularProgressBar.Style>
+                                <TextBlock Text="{Binding HeroLabel}"
+                                           Foreground="{Binding HeroAccent}"
+                                           FontSize="12"
+                                           FontWeight="Bold"/>
 
-                                    <Style TargetType="controls:CircularProgressBar">
+                                <TextBlock Text="{Binding HeroTitle}"
+                                           Foreground="{StaticResource PrimaryTextBrush}"
+                                           FontSize="27"
+                                           FontWeight="Bold"
+                                           Margin="0,7,0,0"/>
 
-                                        <Setter Property="Visibility"
-                                                Value="Collapsed"/>
+                                <TextBlock Text="{Binding HeroSubtitle}"
+                                           Foreground="{StaticResource SecondaryTextBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap"
+                                           Margin="0,7,15,0"/>
 
-                                        <Style.Triggers>
+                                <!-- BOTÕES -->
 
-                                            <DataTrigger Binding="{Binding IsScanning}"
-                                                         Value="True">
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,20,0,0">
+
+                                    <!-- VERIFICAR AGORA -->
+
+                                    <Button Command="{Binding StartScanCommand}"
+                                            Margin="0,0,12,0">
+
+                                        <Button.Style>
+
+                                            <Style TargetType="Button"
+                                                   BasedOn="{StaticResource PrimaryActionButtonStyle}">
 
                                                 <Setter Property="Visibility"
                                                         Value="Visible"/>
 
-                                            </DataTrigger>
+                                                <Style.Triggers>
 
-                                        </Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ServiceAvailable}"
+                                                                 Value="False">
 
-                                    </Style>
+                                                        <Setter Property="Visibility"
+                                                                Value="Collapsed"/>
 
-                                </controls:CircularProgressBar.Style>
+                                                    </DataTrigger>
 
-                            </controls:CircularProgressBar>
+                                                </Style.Triggers>
+
+                                            </Style>
+
+                                        </Button.Style>
+
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="&#xE895;"
+                                                       FontFamily="Segoe Fluent Icons"
+                                                       FontSize="17"
+                                                       Margin="0,0,10,0"
+                                                       VerticalAlignment="Center"/>
+
+                                            <TextBlock Text="{Binding PrimaryActionText}"
+                                                       VerticalAlignment="Center"/>
+
+                                        </StackPanel>
+
+                                    </Button>
+
+                                    <!-- RECONECTAR -->
+
+                                    <Button Command="{Binding ReconnectCommand}"
+                                            Height="48"
+                                            MinWidth="190"
+                                            Padding="18,0"
+                                            Foreground="#061E1B"
+                                            BorderThickness="0"
+                                            FontSize="14"
+                                            FontWeight="SemiBold"
+                                            Cursor="Hand">
+
+                                        <Button.Style>
+
+                                            <Style TargetType="Button">
+
+                                                <Setter Property="Visibility"
+                                                        Value="Collapsed"/>
+
+                                                <Setter Property="Background"
+                                                        Value="#35D5C4"/>
+
+                                                <Setter Property="Template">
+
+                                                    <Setter.Value>
+
+                                                        <ControlTemplate TargetType="Button">
+
+                                                            <Border x:Name="Root"
+                                                                    Background="{TemplateBinding Background}"
+                                                                    CornerRadius="12">
+
+                                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                                  VerticalAlignment="Center"/>
+
+                                                            </Border>
+
+                                                            <ControlTemplate.Triggers>
+
+                                                                <Trigger Property="IsMouseOver"
+                                                                         Value="True">
+
+                                                                    <Setter TargetName="Root"
+                                                                            Property="Background"
+                                                                            Value="#45E0D0"/>
+
+                                                                </Trigger>
+
+                                                                <Trigger Property="IsPressed"
+                                                                         Value="True">
+
+                                                                    <Setter TargetName="Root"
+                                                                            Property="Background"
+                                                                            Value="#27BFAF"/>
+
+                                                                </Trigger>
+
+                                                                <Trigger Property="IsEnabled"
+                                                                         Value="False">
+
+                                                                    <Setter TargetName="Root"
+                                                                            Property="Opacity"
+                                                                            Value="0.55"/>
+
+                                                                </Trigger>
+
+                                                            </ControlTemplate.Triggers>
+
+                                                        </ControlTemplate>
+
+                                                    </Setter.Value>
+
+                                                </Setter>
+
+                                                <Style.Triggers>
+
+                                                    <DataTrigger Binding="{Binding ServiceAvailable}"
+                                                                 Value="False">
+
+                                                        <Setter Property="Visibility"
+                                                                Value="Visible"/>
+
+                                                    </DataTrigger>
+
+                                                </Style.Triggers>
+
+                                            </Style>
+
+                                        </Button.Style>
+
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="&#xE72C;"
+                                                       FontFamily="Segoe Fluent Icons"
+                                                       FontSize="17"
+                                                       Margin="0,0,10,0"
+                                                       VerticalAlignment="Center"/>
+
+                                            <TextBlock Text="{Binding ReconnectText}"
+                                                       VerticalAlignment="Center"/>
+
+                                        </StackPanel>
+
+                                    </Button>
+
+                                </StackPanel>
+
+                            </StackPanel>
 
                         </Grid>
 
-                        <!-- ========================================== -->
-                        <!-- TEXTO HERO -->
-                        <!-- ========================================== -->
+                        <!-- ====================================================== -->
+                        <!-- ESTADO DE VERIFICAÇÃO -->
+                        <!-- ====================================================== -->
 
-                        <StackPanel Grid.Column="1"
-                                    VerticalAlignment="Center"
-                                    Margin="16,0,0,0">
+                        <Grid>
 
-                            <TextBlock Text="{Binding HeroLabel}"
-                                       Foreground="{Binding HeroAccent}"
-                                       FontSize="12"
-                                       FontWeight="Bold"/>
+                            <Grid.Style>
 
-                            <TextBlock Text="{Binding HeroTitle}"
-                                       Foreground="{StaticResource PrimaryTextBrush}"
-                                       FontSize="27"
-                                       FontWeight="Bold"
-                                       Margin="0,7,0,0"/>
+                                <Style TargetType="Grid">
 
-                            <TextBlock Text="{Binding HeroSubtitle}"
-                                       Foreground="{StaticResource SecondaryTextBrush}"
-                                       FontSize="13"
-                                       TextWrapping="Wrap"
-                                       Margin="0,7,15,0"/>
+                                    <Setter Property="Visibility"
+                                            Value="Collapsed"/>
 
-                            <!-- ====================================== -->
-                            <!-- BOTÕES -->
-                            <!-- ====================================== -->
+                                    <Style.Triggers>
 
-                            <StackPanel Orientation="Horizontal"
-                                        Margin="0,20,0,0">
-
-                                <!-- VERIFICAR AGORA -->
-
-                                <Button Command="{Binding StartScanCommand}"
-                                        Margin="0,0,12,0">
-
-                                    <Button.Style>
-
-                                        <Style TargetType="Button"
-                                               BasedOn="{StaticResource PrimaryActionButtonStyle}">
+                                        <DataTrigger Binding="{Binding IsScanning}"
+                                                     Value="True">
 
                                             <Setter Property="Visibility"
                                                     Value="Visible"/>
 
-                                            <Style.Triggers>
+                                        </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding ServiceAvailable}"
-                                                             Value="False">
+                                    </Style.Triggers>
 
-                                                    <Setter Property="Visibility"
-                                                            Value="Collapsed"/>
+                                </Style>
 
-                                                </DataTrigger>
+                            </Grid.Style>
 
-                                                <DataTrigger Binding="{Binding IsScanning}"
-                                                             Value="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="125"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                                                    <Setter Property="IsEnabled"
-                                                            Value="False"/>
+                            <!-- ========================================== -->
+                            <!-- PROGRESSO CIRCULAR -->
+                            <!-- ========================================== -->
 
-                                                </DataTrigger>
+                            <controls:CircularProgressBar Progress="{Binding ScanProgress, TargetNullValue=0}"
+                                                          Width="92"
+                                                          Height="92"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
 
-                                            </Style.Triggers>
+                            <!-- ========================================== -->
+                            <!-- INFORMAÇÕES DA VERIFICAÇÃO -->
+                            <!-- ========================================== -->
 
-                                        </Style>
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="15,0,0,0">
 
-                                    </Button.Style>
+                                <!-- ETAPA -->
 
-                                    <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center">
+                                <TextBlock Text="{Binding ScanStepLabel}"
+                                           Foreground="#35D5C4"
+                                           FontSize="12"
+                                           FontWeight="Bold"/>
 
-                                        <TextBlock Text="&#xE895;"
-                                                   FontFamily="Segoe Fluent Icons"
-                                                   FontSize="17"
-                                                   Margin="0,0,10,0"
-                                                   VerticalAlignment="Center"/>
+                                <!-- TÍTULO -->
 
-                                        <TextBlock Text="{Binding PrimaryActionText}"
-                                                   VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding ScanTitle}"
+                                           Foreground="{StaticResource PrimaryTextBrush}"
+                                           FontSize="24"
+                                           FontWeight="Bold"
+                                           Margin="0,8,0,0"/>
 
-                                    </StackPanel>
+                                <!-- STATUS -->
 
-                                </Button>
+                                <TextBlock Text="{Binding ScanStatusText}"
+                                           Foreground="{StaticResource SecondaryTextBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap"
+                                           Margin="0,8,20,0"/>
 
-                                <!-- RECONECTAR -->
+                                <!-- OPERAÇÃO ATUAL -->
 
-                                <Button Command="{Binding ReconnectCommand}"
-                                        Height="48"
-                                        MinWidth="190"
-                                        Padding="18,0"
-                                        Foreground="#061E1B"
-                                        BorderThickness="0"
-                                        FontSize="14"
-                                        FontWeight="SemiBold"
-                                        Cursor="Hand"
-                                        HorizontalAlignment="Left">
+                                <Border Background="#0D1830"
+                                        BorderBrush="#27375A"
+                                        BorderThickness="1"
+                                        CornerRadius="7"
+                                        Padding="12,7"
+                                        Margin="0,12,20,0">
 
-                                    <Button.Style>
+                                    <TextBlock Text="{Binding ScanDetailText}"
+                                               Foreground="#A7BDEA"
+                                               FontFamily="Cascadia Mono"
+                                               FontSize="11"
+                                               TextTrimming="CharacterEllipsis"/>
 
-                                        <Style TargetType="Button">
-
-                                            <Setter Property="Visibility"
-                                                    Value="Collapsed"/>
-
-                                            <Setter Property="Background"
-                                                    Value="#35D5C4"/>
-
-                                            <Setter Property="Template">
-
-                                                <Setter.Value>
-
-                                                    <ControlTemplate TargetType="Button">
-
-                                                        <Border x:Name="Root"
-                                                                Background="{TemplateBinding Background}"
-                                                                CornerRadius="12">
-
-                                                            <ContentPresenter HorizontalAlignment="Center"
-                                                                              VerticalAlignment="Center"/>
-
-                                                        </Border>
-
-                                                        <ControlTemplate.Triggers>
-
-                                                            <Trigger Property="IsMouseOver"
-                                                                     Value="True">
-
-                                                                <Setter TargetName="Root"
-                                                                        Property="Background"
-                                                                        Value="#45E0D0"/>
-
-                                                            </Trigger>
-
-                                                            <Trigger Property="IsPressed"
-                                                                     Value="True">
-
-                                                                <Setter TargetName="Root"
-                                                                        Property="Background"
-                                                                        Value="#27BFAF"/>
-
-                                                            </Trigger>
-
-                                                            <Trigger Property="IsEnabled"
-                                                                     Value="False">
-
-                                                                <Setter TargetName="Root"
-                                                                        Property="Opacity"
-                                                                        Value="0.55"/>
-
-                                                            </Trigger>
-
-                                                        </ControlTemplate.Triggers>
-
-                                                    </ControlTemplate>
-
-                                                </Setter.Value>
-
-                                            </Setter>
-
-                                            <Style.Triggers>
-
-                                                <DataTrigger Binding="{Binding ServiceAvailable}"
-                                                             Value="False">
-
-                                                    <Setter Property="Visibility"
-                                                            Value="Visible"/>
-
-                                                </DataTrigger>
-
-                                            </Style.Triggers>
-
-                                        </Style>
-
-                                    </Button.Style>
-
-                                    <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center">
-
-                                        <TextBlock Text="&#xE72C;"
-                                                   FontFamily="Segoe Fluent Icons"
-                                                   FontSize="17"
-                                                   Margin="0,0,10,0"
-                                                   VerticalAlignment="Center"/>
-
-                                        <TextBlock Text="{Binding ReconnectText}"
-                                                   VerticalAlignment="Center"/>
-
-                                    </StackPanel>
-
-                                </Button>
+                                </Border>
 
                             </StackPanel>
 
-                        </StackPanel>
+                        </Grid>
 
                     </Grid>
 

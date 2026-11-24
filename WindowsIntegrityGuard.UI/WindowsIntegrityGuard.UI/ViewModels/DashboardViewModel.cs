@@ -32,6 +32,10 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         private bool _serviceAvailable;
         private bool _isScanning;
         private bool _isReconnecting;
+        private string _scanStepLabel = "ETAPA 1 DE 3 · PREPARAÇÃO";
+        private string _scanTitle = "Preparando verificação";
+        private string _scanStatusText = "O Windows Integrity Guard está preparando a análise.";
+        private string _scanDetailText = "Inicializando componentes de verificação...";
 
         public DashboardViewModel(IIpcClient ipcClient)
         {
@@ -44,8 +48,29 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         public string IntegrityStatus { get => _integrityStatus; set => SetProperty(ref _integrityStatus, value); }
         public string IntegrityMessage { get => _integrityMessage; set => SetProperty(ref _integrityMessage, value); }
         public string LastScan { get => _lastScan; set => SetProperty(ref _lastScan, value); }
-        public string CurrentOperation { get => _currentOperation; set { if (SetProperty(ref _currentOperation, value)) { RaiseStartScanCanExecuteChanged(); } } }
-        public double? ScanProgress { get => _scanProgress; set => SetProperty(ref _scanProgress, value); }
+        public string CurrentOperation
+        {
+            get => _currentOperation;
+            set
+            {
+                if (SetProperty(ref _currentOperation, value))
+                {
+                    UpdateScanningPresentation();
+                    RaiseStartScanCanExecuteChanged();
+                }
+            }
+        }
+        public double? ScanProgress
+        {
+            get => _scanProgress;
+            set
+            {
+                if (SetProperty(ref _scanProgress, value))
+                {
+                    UpdateScanningPresentation();
+                }
+            }
+        }
         public int? FilesVerified { get => _filesVerified; set => SetProperty(ref _filesVerified, value); }
         public int? ProblemsFound { get => _problemsFound; set => SetProperty(ref _problemsFound, value); }
         public int? ProblemsRepaired { get => _problemsRepaired; set => SetProperty(ref _problemsRepaired, value); }
@@ -65,6 +90,10 @@ namespace WindowsIntegrityGuard.UI.ViewModels
         public bool ServiceUnavailable => !ServiceAvailable;
         public bool IsScanning { get => _isScanning; set { if (SetProperty(ref _isScanning, value)) { RaiseStartScanCanExecuteChanged(); } } }
         public bool IsReconnecting { get => _isReconnecting; set => SetProperty(ref _isReconnecting, value); }
+        public string ScanStepLabel { get => _scanStepLabel; set => SetProperty(ref _scanStepLabel, value); }
+        public string ScanTitle { get => _scanTitle; set => SetProperty(ref _scanTitle, value); }
+        public string ScanStatusText { get => _scanStatusText; set => SetProperty(ref _scanStatusText, value); }
+        public string ScanDetailText { get => _scanDetailText; set => SetProperty(ref _scanDetailText, value); }
 
         public ICommand StartScanCommand { get; }
         public ICommand ReconnectCommand { get; }
@@ -230,6 +259,43 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             {
                 command.RaiseCanExecuteChanged();
             }
+        }
+
+        private void UpdateScanningPresentation()
+        {
+            double progress = ScanProgress ?? 0;
+
+            if (progress < 15)
+            {
+                ScanStepLabel = "ETAPA 1 DE 3 · PREPARAÇÃO";
+                ScanTitle = "Preparando verificação";
+                ScanStatusText = "Preparando os componentes necessários para analisar a integridade do Windows.";
+                ScanDetailText = string.IsNullOrWhiteSpace(CurrentOperation) ? "Inicializando verificação..." : CurrentOperation;
+                return;
+            }
+
+            if (progress < 65)
+            {
+                ScanStepLabel = "ETAPA 2 DE 3 · ARQUIVOS PROTEGIDOS";
+                ScanTitle = "Verificando arquivos do sistema";
+                ScanStatusText = "Você pode continuar usando o computador enquanto os arquivos protegidos são analisados.";
+                ScanDetailText = string.IsNullOrWhiteSpace(CurrentOperation) ? "Executando verificação SFC..." : CurrentOperation;
+                return;
+            }
+
+            if (progress < 90)
+            {
+                ScanStepLabel = "ETAPA 3 DE 3 · COMPONENT STORE";
+                ScanTitle = "Verificando componentes do Windows";
+                ScanStatusText = "Analisando a integridade do Component Store utilizado pelo Windows.";
+                ScanDetailText = string.IsNullOrWhiteSpace(CurrentOperation) ? "Verificando Component Store com DISM..." : CurrentOperation;
+                return;
+            }
+
+            ScanStepLabel = "ETAPA 3 DE 3 · FINALIZAÇÃO";
+            ScanTitle = "Finalizando verificação";
+            ScanStatusText = "Consolidando os resultados da análise de integridade.";
+            ScanDetailText = string.IsNullOrWhiteSpace(CurrentOperation) ? "Classificando resultado..." : CurrentOperation;
         }
 
         #endregion
