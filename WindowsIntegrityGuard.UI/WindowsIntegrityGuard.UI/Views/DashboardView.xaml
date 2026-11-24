@@ -24,7 +24,8 @@
             <!-- HEADER -->
             <!-- ====================================================== -->
 
-            <Grid Grid.Row="0" Margin="0,0,150,0">
+            <Grid Grid.Row="0"
+                  Margin="0,0,150,0">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -100,7 +101,6 @@
                         CornerRadius="20"
                         Padding="30">
 
-                    <!-- GRADIENTE -->
                     <Border.Background>
 
                         <LinearGradientBrush StartPoint="0,0.5"
@@ -141,14 +141,11 @@
                               HorizontalAlignment="Left"
                               VerticalAlignment="Center">
 
-                            <!-- ====================================== -->
                             <!-- ALERTA VERMELHO -->
-                            <!-- ====================================== -->
 
                             <Grid x:Name="AlertIndicator">
 
                                 <Grid.Style>
-
                                     <Style TargetType="Grid">
 
                                         <Setter Property="Visibility"
@@ -156,7 +153,6 @@
 
                                         <Style.Triggers>
 
-                                            <!-- DURANTE SCAN ESCONDE ALERTA -->
                                             <DataTrigger Binding="{Binding IsScanning}"
                                                          Value="True">
 
@@ -168,10 +164,10 @@
                                         </Style.Triggers>
 
                                     </Style>
-
                                 </Grid.Style>
 
                                 <!-- HALO -->
+
                                 <Ellipse Width="116"
                                          Height="116"
                                          Fill="#401C2A"
@@ -271,9 +267,7 @@
 
                             </Grid>
 
-                            <!-- ====================================== -->
                             <!-- PROGRESSO CIRCULAR -->
-                            <!-- ====================================== -->
 
                             <controls:CircularProgressBar Progress="{Binding ScanProgress, TargetNullValue=0}"
                                                           Width="118"
@@ -331,76 +325,174 @@
                                        TextWrapping="Wrap"
                                        Margin="0,7,15,0"/>
 
+                            <!-- ====================================== -->
                             <!-- BOTÕES -->
+                            <!-- ====================================== -->
 
                             <StackPanel Orientation="Horizontal"
                                         Margin="0,20,0,0">
 
-                                <!-- VERIFICAR -->
+                                <!-- VERIFICAR AGORA -->
+
+                                <Button Command="{Binding StartScanCommand}"
+                                        Margin="0,0,12,0">
+
+                                    <Button.Style>
+
+                                        <Style TargetType="Button"
+                                               BasedOn="{StaticResource PrimaryActionButtonStyle}">
+
+                                            <Setter Property="Visibility"
+                                                    Value="Visible"/>
+
+                                            <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding ServiceAvailable}"
+                                                             Value="False">
+
+                                                    <Setter Property="Visibility"
+                                                            Value="Collapsed"/>
+
+                                                </DataTrigger>
+
+                                                <DataTrigger Binding="{Binding IsScanning}"
+                                                             Value="True">
+
+                                                    <Setter Property="IsEnabled"
+                                                            Value="False"/>
+
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+
+                                        </Style>
+
+                                    </Button.Style>
+
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+
+                                        <TextBlock Text="&#xE895;"
+                                                   FontFamily="Segoe Fluent Icons"
+                                                   FontSize="17"
+                                                   Margin="0,0,10,0"
+                                                   VerticalAlignment="Center"/>
+
+                                        <TextBlock Text="{Binding PrimaryActionText}"
+                                                   VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <!-- RECONECTAR -->
 
                                 <Button Command="{Binding ReconnectCommand}"
                                         Height="48"
                                         MinWidth="190"
                                         Padding="18,0"
-                                        Background="#35D5C4"
                                         Foreground="#061E1B"
                                         BorderThickness="0"
                                         FontSize="14"
-                                        FontWeight="Bold"
+                                        FontWeight="SemiBold"
                                         Cursor="Hand"
                                         HorizontalAlignment="Left">
 
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
+                                    <Button.Style>
 
-                                            <Border x:Name="Root"
-                                                    Background="{TemplateBinding Background}"
-                                                    CornerRadius="12">
+                                        <Style TargetType="Button">
 
-                                                <StackPanel Orientation="Horizontal"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center">
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed"/>
 
-                                                    <TextBlock Text="&#xE72C;"
-                                                               FontFamily="Segoe Fluent Icons"
-                                                               FontSize="17"
-                                                               Margin="0,0,10,0"
-                                                               VerticalAlignment="Center"/>
+                                            <Setter Property="Background"
+                                                    Value="#35D5C4"/>
 
-                                                    <TextBlock Text="{Binding ReconnectText}"
-                                                               VerticalAlignment="Center"/>
+                                            <Setter Property="Template">
 
-                                                </StackPanel>
+                                                <Setter.Value>
 
-                                            </Border>
+                                                    <ControlTemplate TargetType="Button">
 
-                                            <ControlTemplate.Triggers>
+                                                        <Border x:Name="Root"
+                                                                Background="{TemplateBinding Background}"
+                                                                CornerRadius="12">
 
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="Root"
-                                                            Property="Background"
-                                                            Value="#45E0D0"/>
-                                                </Trigger>
+                                                            <ContentPresenter HorizontalAlignment="Center"
+                                                                              VerticalAlignment="Center"/>
 
-                                                <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="Root"
-                                                            Property="Background"
-                                                            Value="#27BFAF"/>
-                                                </Trigger>
+                                                        </Border>
 
-                                                <Trigger Property="IsEnabled" Value="False">
-                                                    <Setter TargetName="Root"
-                                                            Property="Opacity"
-                                                            Value="0.55"/>
-                                                </Trigger>
+                                                        <ControlTemplate.Triggers>
 
-                                            </ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver"
+                                                                     Value="True">
 
-                                        </ControlTemplate>
-                                    </Button.Template>
+                                                                <Setter TargetName="Root"
+                                                                        Property="Background"
+                                                                        Value="#45E0D0"/>
+
+                                                            </Trigger>
+
+                                                            <Trigger Property="IsPressed"
+                                                                     Value="True">
+
+                                                                <Setter TargetName="Root"
+                                                                        Property="Background"
+                                                                        Value="#27BFAF"/>
+
+                                                            </Trigger>
+
+                                                            <Trigger Property="IsEnabled"
+                                                                     Value="False">
+
+                                                                <Setter TargetName="Root"
+                                                                        Property="Opacity"
+                                                                        Value="0.55"/>
+
+                                                            </Trigger>
+
+                                                        </ControlTemplate.Triggers>
+
+                                                    </ControlTemplate>
+
+                                                </Setter.Value>
+
+                                            </Setter>
+
+                                            <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding ServiceAvailable}"
+                                                             Value="False">
+
+                                                    <Setter Property="Visibility"
+                                                            Value="Visible"/>
+
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+
+                                        </Style>
+
+                                    </Button.Style>
+
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+
+                                        <TextBlock Text="&#xE72C;"
+                                                   FontFamily="Segoe Fluent Icons"
+                                                   FontSize="17"
+                                                   Margin="0,0,10,0"
+                                                   VerticalAlignment="Center"/>
+
+                                        <TextBlock Text="{Binding ReconnectText}"
+                                                   VerticalAlignment="Center"/>
+
+                                    </StackPanel>
 
                                 </Button>
-
 
                             </StackPanel>
 
@@ -546,7 +638,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- ARQUIVOS -->
+                <!-- ARQUIVOS VERIFICADOS -->
 
                 <Border Grid.Column="0"
                         Style="{StaticResource DashboardCardStyle}"
@@ -766,8 +858,6 @@
                                    HorizontalAlignment="Right"/>
 
                     </Grid>
-
-                    <!-- BARRA HORIZONTAL SECUNDÁRIA -->
 
                     <ProgressBar Grid.Row="2"
                                  Minimum="0"

@@ -199,7 +199,8 @@ namespace WindowsIntegrityGuard.UI.ViewModels
                 if (response.Success)
                 {
                     ServiceAvailable = true;
-                    ReconnectText = "Reconectado";
+                    ReconnectText = "Reconectar ao serviço";
+                    IntegrityMessage = "Conexão com o Windows Integrity Guard Service restabelecida.";
                 }
                 else
                 {
@@ -215,6 +216,11 @@ namespace WindowsIntegrityGuard.UI.ViewModels
             finally
             {
                 IsReconnecting = false;
+
+                if (!ServiceAvailable)
+                {
+                    ReconnectText = "Reconectar ao serviço";
+                }
             }
         }
 
